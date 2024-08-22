@@ -2,6 +2,7 @@ import React from "react";
 
 import WeekBox from "widgets/calendar/WeekBox";
 import AllDay from "widgets/calendar/AllDay";
+import { TScheduleLabelItem } from "types";
 
 const monthList = (nowDate: Date) => {
   const nowYear = nowDate.getFullYear();
@@ -32,21 +33,28 @@ const monthList = (nowDate: Date) => {
 interface Props {
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
+  scheduleListData: TScheduleLabelItem[];
 }
 
-const DateBox = ({ nowDate, setNowDate }: Props) => {
+const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
   const allDay: Date[] = monthList(nowDate);
   const weeks = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   return (
-    <article className="w-[100%] h-[70vh] flex grid grid-cols-7 ">
+    <article className="w-full h-[70vh] grid grid-cols-7 ">
       {weeks.map((week: string) => {
         return <WeekBox key={week} weekName={week} />;
       })}
 
       {allDay.map((day: Date) => {
         return (
-          <AllDay key={day.toISOString()} day={day} nowDate={nowDate} setNowDate={setNowDate} />
+          <AllDay
+            key={day.toISOString()}
+            day={day}
+            nowDate={nowDate}
+            setNowDate={setNowDate}
+            scheduleListData={scheduleListData}
+          />
         );
       })}
     </article>

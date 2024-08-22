@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
 
-import ScheduleAlarmOnBtn from "widgets/scheduleModal/ScheduleAlarmOnBtn";
-import ScheduleAlarmOffBtn from "widgets/scheduleModal/ScheduleAlarmOffBtn";
 import edit from "shared/imgs/edit.svg";
 import finish from "shared/imgs/finish.svg";
-import { TScheduleItem } from "types";
+import DeleteInterestScheduleItem from "widgets/interestScheduleModal/DeleteInterestScheduleItem";
 import { useCookies } from "react-cookie";
-import DeletePersonalScheduleItem from "./DeletePersonalScheduleItem";
+import { TScheduleItem } from "types";
 import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
+import InterestScheduleAlarmOnBtn from "./InterestScheduleAlarmOnBtn";
+import InterestScheduleAlarmOffBtn from "./InterestScheduleAlarmOffBtn";
 
-const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
-  const { idx, name, time, type, contents, priority } = props.data;
+const InterestScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
+  const { idx, name, time, contents, priority } = props.data;
   const [cookies] = useCookies(["token"]);
 
   // 스케줄 알람 여부 버튼 토글
@@ -43,10 +43,10 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
   const selectedTime = scheduleTime.split(":").join("");
   const fullDate = Number(`${year}${month}${date}${selectedTime}`);
 
-  // 스케줄 수정 PUT api 연결 (/schedules/:idx)
+  // 관심사 스케줄 수정 PUT api 연결 (/managers/schedules/:idx)
   const postEditedScheduleEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules/${idx}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_KEY}/managers/schedules/${idx}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
         },
         body: JSON.stringify({
           fullDate: fullDate,
-          personalContents: scheduleContents,
+          interestContents: scheduleContents,
         }),
       });
 
@@ -65,6 +65,9 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
         alert(`글자수 제한에 유의해주세요.`);
       } else if (response.status === 401) {
         console.log("잘못된 인증 정보 제공");
+        alert(`스케줄 수정에 실패했습니다.`);
+      } else if (response.status === 403) {
+        console.log("권한이 없는 사용자의 접근");
         alert(`스케줄 수정에 실패했습니다.`);
       } else if (response.status === 404) {
         console.log("해당 관심사 스케줄이 없음");
@@ -85,21 +88,18 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
       <div className="w-[80%] flex items-center">
         {alarm ? (
           <div onClick={clickSetAlarmEvent}>
-            <ScheduleAlarmOnBtn idx={idx} />
+            <InterestScheduleAlarmOnBtn idx={idx} />
           </div>
         ) : (
           <div onClick={clickSetAlarmEvent}>
-            <ScheduleAlarmOffBtn idx={idx} />
+            <InterestScheduleAlarmOffBtn idx={idx} />
           </div>
         )}
-
         {editing ? (
           <input type="time" onChange={(e) => setScheduleTime(e.target.value)} />
         ) : (
           <div className="w-[15%]">{time}</div>
         )}
-
-        {type === "interest" && <div className="w-[20%]">{name}</div>}
 
         {editing ? (
           <input
@@ -107,7 +107,7 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
             className="w-[350px] outline-alertColor	bg-transparent p-[10px] items-center"
             ref={titleRef}
             defaultValue={contents}
-            maxLength={20}
+            maxLength={100}
             onChange={(e) => setScheduleContents(e.target.value)}
           />
         ) : (
@@ -115,27 +115,24 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
         )}
       </div>
 
-      {/* 개인 스케줄일 때에만 수정 및 삭제 가능 */}
-      {type === "personal" && (
-        <div className={`w-[13%] flex ${editing ? "justify-center" : "justify-between"}`}>
-          {editing ? (
-            <>
-              <button onClick={postEditedScheduleEvent}>
-                <img src={finish} alt="제출하기" />
-              </button>
-            </>
-          ) : (
-            <>
-              <button onClick={editTitleEvent}>
-                <img src={edit} alt="수정하기" />
-              </button>
-              <DeletePersonalScheduleItem {...props.data} />
-            </>
-          )}
-        </div>
-      )}
+      <div className={`w-[13%] flex ${editing ? "justify-center" : "justify-between"}`}>
+        {editing ? (
+          // 수정하기
+          <button onClick={postEditedScheduleEvent}>
+            <img src={finish} alt="제출하기" />
+          </button>
+        ) : (
+          <>
+            <button onClick={editTitleEvent}>
+              <img src={edit} alt="수정하기" />
+            </button>
+            {/* 삭제하기 */}
+            <DeleteInterestScheduleItem {...props.data} />
+          </>
+        )}
+      </div>
     </article>
   );
 };
 
-export default ScheduleItem;
+export default InterestScheduleItem;

@@ -3,19 +3,22 @@ import { useCookies } from "react-cookie";
 
 import alarmOn from "shared/imgs/alarmOn.svg";
 
-// 스케줄 중요 알림 설정 POST api (/schedules/:idx/notify)
-const ScheduleAlarmOnBtn: React.FC<{ idx?: number }> = ({ idx }) => {
+// 스케줄 중요 알림 설정 POST api (/schedules/interest/:idx/notify)
+const InterestScheduleAlarmOnBtn: React.FC<{ idx?: number }> = ({ idx }) => {
   const [cookies] = useCookies(["token"]);
 
   const scheduleAlarmOnEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules/${idx}/notify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_KEY}/schedules/interest/${idx}/notify`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         alert("해당 스케줄 알림 설정을 완료했습니다.");
@@ -39,4 +42,4 @@ const ScheduleAlarmOnBtn: React.FC<{ idx?: number }> = ({ idx }) => {
   );
 };
 
-export default ScheduleAlarmOnBtn;
+export default InterestScheduleAlarmOnBtn;

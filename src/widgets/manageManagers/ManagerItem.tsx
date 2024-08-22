@@ -3,17 +3,10 @@ import React, { useState, useRef } from "react";
 import edit from "shared/imgs/edit.svg";
 import DeleteManagerBtn from "widgets/manageManagers/DeleteManagerBtn";
 import SubmitEditedManagerBtn from "widgets/manageManagers/SubmitEditedManagerBtn";
+import { TManagerItem } from "types";
 
-interface ManageItemProps {
-  data: {
-    id: number;
-    managerNickname: string;
-    subject: string;
-  };
-}
-
-const ManagerItem: React.FC<ManageItemProps> = (props) => {
-  const { id, managerNickname, subject } = props.data;
+const ManagerItem: React.FC<{ data: TManagerItem }> = (props) => {
+  const { managerIdx, managerNickname, interestIdx, interest } = props.data;
 
   // 수정하기 버튼 클릭 시
   // 1. managerNickname input이 editable하게 됨
@@ -23,44 +16,44 @@ const ManagerItem: React.FC<ManageItemProps> = (props) => {
   const editManagerEvent = () => {
     setEditing(!editing);
   };
+  const [newManager, setNewManager] = useState(managerNickname);
 
   return (
-    <tr className="w-[100%] px-[10%] my-[10px] flex justify-between">
-      <div className="flex w-[80%]">
-        <th className="w-[10%] px-[10px] py-4">
-          <div className="flex justify-start">{id}</div>
-        </th>
+    <tr className="w-full px-[10%] my-[10px] flex items-center">
+      <td className="w-[10%] px-[10px] py-4">
+        <div className="flex justify-start">{managerNickname}</div>
+      </td>
+      <td className="w-[30%] px-[10px] py-4">
         {editing ? (
           <input
             type="text"
-            className="w-[25%] px-[10px] py-4 mx-[10px] border border-alertColor outline-alertColor bg-transparent"
+            className="w-full px-[10px] py-2 border border-alertColor outline-alertColor bg-transparent"
             ref={nicknameRef}
             defaultValue={managerNickname}
             maxLength={20}
+            onChange={(e) => setNewManager(e.target.value)}
           />
         ) : (
-          <th className="w-[30%] px-[10px] py-4">
-            <div className="flex justify-start px-2">{managerNickname}</div>
-          </th>
+          <div className="flex justify-start px-2">{managerNickname}</div>
         )}
+      </td>
 
-        <th className="w-[50%] px-[10px] py-4">
-          <div className="flex justify-start px-2">{subject}</div>
-        </th>
-      </div>
+      <td className="w-[50%] px-[10px] py-4">
+        <div className="flex justify-start px-2">{interest}</div>
+      </td>
 
-      {editing ? (
-        <th className="w-[15%] flex justify-center px-[10px]">
-          <SubmitEditedManagerBtn />
-        </th>
-      ) : (
-        <th className="w-[15%] flex justify-between px-[10px]">
-          <button onClick={editManagerEvent}>
-            <img src={edit} alt="수정" />
-          </button>
-          <DeleteManagerBtn />
-        </th>
-      )}
+      <td className="w-[15%] flex justify-between px-[10px]">
+        {editing ? (
+          <SubmitEditedManagerBtn {...props} newManager={newManager} />
+        ) : (
+          <>
+            <button onClick={editManagerEvent}>
+              <img src={edit} alt="수정" />
+            </button>
+            <DeleteManagerBtn {...props.data} />
+          </>
+        )}
+      </td>
     </tr>
   );
 };

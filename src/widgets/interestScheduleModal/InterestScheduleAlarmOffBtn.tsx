@@ -3,19 +3,22 @@ import { useCookies } from "react-cookie";
 
 import alarmOff from "shared/imgs/alarmOff.svg";
 
-// 스케줄 알림 삭제 DELETE api (/schedules/:idx/notify)
-const ScheduleAlarmOffBtn: React.FC<{ idx?: number }> = ({ idx }) => {
+// 스케줄 알림 삭제 DELETE api (/schedules/interest/:idx/notify)
+const InterestScheduleAlarmOffBtn: React.FC<{ idx?: number }> = ({ idx }) => {
   const [cookies] = useCookies(["token"]);
 
   const scheduleAlarmOffEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules/${idx}/notify`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_KEY}/schedules/interest/${idx}/notify`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         alert(`해당 스케줄 알림을 해제했습니다.`);
@@ -39,4 +42,4 @@ const ScheduleAlarmOffBtn: React.FC<{ idx?: number }> = ({ idx }) => {
   );
 };
 
-export default ScheduleAlarmOffBtn;
+export default InterestScheduleAlarmOffBtn;

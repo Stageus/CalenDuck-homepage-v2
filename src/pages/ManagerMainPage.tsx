@@ -2,16 +2,23 @@ import React from "react";
 
 import HeaderItem from "shared/components/HeaderItem";
 import CalendarItem from "widgets/calendar/CalendarItem";
-import ManagerScheduleModal from "widgets/managerScheduleModal/ManagerScheduleModal";
+import InterestScheduleModal from "widgets/interestScheduleModal/InterestScheduleModal";
 
 import { useRecoilState } from "recoil";
 import scheduleModalToggleAtom from "shared/recoil/scheduleModalToggleAtom";
+import selectedDateAtom from "../shared/recoil/selectedDateAtom";
 
 const ManagerMainPage = () => {
   // 해당 날짜에 해당하는 ScheduleModal 열림
   const [openModal, setOpenModal] = useRecoilState(scheduleModalToggleAtom);
+  const [, setSelectedDate] = useRecoilState(selectedDateAtom);
+
   const openScheduleModalEvent = () => {
     setOpenModal(!openModal);
+  };
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    openScheduleModalEvent();
   };
 
   return (
@@ -19,7 +26,7 @@ const ManagerMainPage = () => {
       <HeaderItem />
 
       <article className="flex flex-col flex-grow">
-        <CalendarItem />
+        <CalendarItem onDateClick={handleDateClick} />
       </article>
 
       {/* 스케줄 모달 */}
@@ -29,7 +36,7 @@ const ManagerMainPage = () => {
             className="fixed inset-0 bg-lightgrayColor opacity-50"
             onClick={openScheduleModalEvent}
           ></div>
-          <ManagerScheduleModal />
+          <InterestScheduleModal />
         </div>
       )}
     </>

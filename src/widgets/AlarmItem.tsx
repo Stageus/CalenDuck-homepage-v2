@@ -7,27 +7,27 @@ interface AlarmItemProps {
   data: {
     type: number;
     date: string;
-    subject?: string;
+    interestName?: string;
     title: string;
     reply?: string;
   };
 }
 
 const AlarmItem: React.FC<AlarmItemProps> = (props) => {
-  const { type, date, subject, title, reply } = props.data;
+  const { type, date, interestName, title, reply } = props.data;
 
-  let alarmSymbol, typeSubject, content;
+  let alarmSymbol, typeInterest, content;
   if (type === 1) {
     alarmSymbol = "🌟";
-    typeSubject = "24시간 전";
-    content = `[ ${subject}: ${title} ] (이)가 하루 전으로 다가왔어요!`;
+    typeInterest = "24시간 전";
+    content = `[ ${interestName}: ${title} ] (이)가 하루 전으로 다가왔어요!`;
   } else if (type === 2) {
     alarmSymbol = "💌";
-    typeSubject = "마스터 답변";
+    typeInterest = "마스터 답변";
     content = `${title}에 대한 관리자 답변이 도착했습니다.`;
   } else if (type === 3) {
     alarmSymbol = "👑";
-    typeSubject = "관리자 지정";
+    typeInterest = "관리자 지정";
     content = `${title}에 대한 관리자로 지정되었습니다. 축하드립니다!`;
   }
 
@@ -39,7 +39,7 @@ const AlarmItem: React.FC<AlarmItemProps> = (props) => {
 
   return (
     <article
-      className={`w-[100%] ${
+      className={`w-full ${
         openDetail ? "h-[fit-content]" : "h-[70px]"
       } bg-tagColor rounded-[5px] p-[10px] m-[5px]`}
     >
@@ -48,7 +48,7 @@ const AlarmItem: React.FC<AlarmItemProps> = (props) => {
           <span className="mx-[10px]">{alarmSymbol}</span>
           <div className="w-[600px] ml-[10px] flex flex-col justify-start">
             <div className="text-sm text-grayColor">
-              {typeSubject} - {date}
+              {typeInterest} - {date}
             </div>
             <div className="text-lg">{content}</div>
           </div>
