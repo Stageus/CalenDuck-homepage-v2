@@ -27,13 +27,23 @@ const SignInPage = () => {
         }),
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         const data = await response.json();
         setCookies("token", data.token, { path: "/" });
         alert("로그인에 성공하셨습니다.");
-        navigate("/main");
-      } else {
-        alert("로그인에 실패하셨습니다.");
+
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        const formattedDate = `${year}${month}`;
+
+        navigate(`/main?date=${formattedDate}`);
+      } else if (response.status === 400) {
+        alert("정규식 위반");
+      } else if (response.status === 401) {
+        alert("잘못된 인증 정보 제공");
+      } else if (response.status === 500) {
+        alert("서버에러");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -44,9 +54,8 @@ const SignInPage = () => {
   useEffect(() => {
     if (cookies.token) {
       alert("이미 로그인 된 사용자입니다");
-      navigate("/main");
     }
-  }, [cookies, navigate]);
+  }, [cookies.token, navigate]);
 
   return (
     <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-keyColor ">
@@ -95,11 +104,11 @@ const SignInPage = () => {
 
             <div className="flex">
               <Link to="/findId">
-                <span className="text-sm">아이디 찾기 &nbsp;</span>
+                <span className="text-sm">아이디 찾기</span>
               </Link>
               /
               <Link to="/findPw">
-                <span className="text-sm"> &nbsp; 비밀번호 찾기</span>
+                <span className="text-sm">비밀번호 찾기</span>
               </Link>
             </div>
           </div>

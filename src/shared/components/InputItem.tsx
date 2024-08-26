@@ -14,7 +14,8 @@ interface InputItemProps {
 
 const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBtn }) => {
   const [showPw, setShowPw] = useState<boolean>(false);
-  const clickShowPwEvent = () => {
+  const clickShowPwEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setShowPw(!showPw);
   };
 
