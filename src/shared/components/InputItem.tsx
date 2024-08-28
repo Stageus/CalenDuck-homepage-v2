@@ -12,7 +12,7 @@ interface InputItemProps {
   onChange?: (e: any) => void;
 }
 
-const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBtn }) => {
+const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBtn, value }) => {
   const [showPw, setShowPw] = useState<boolean>(false);
   const clickShowPwEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -28,6 +28,7 @@ const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBt
         <input
           className="w-full h-[50px] relative border-solid border-2 border-grayColor rounded-[10px] p-[10px] outline-alertColor"
           type={inputType}
+          defaultValue={value}
           placeholder={placeholder}
         />
         {type === "password" && (

@@ -16,6 +16,7 @@ const SignInPage = () => {
 
   const signInEvent = async () => {
     try {
+      // console.log(`${process.env.REACT_APP_API_KEY}/users/login`);
       const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/login`, {
         method: "POST",
         headers: {
@@ -27,7 +28,8 @@ const SignInPage = () => {
         }),
       });
 
-      if (response.status === 201) {
+      // console.log("::>", response);
+      if (response.status === 200) {
         const data = await response.json();
         setCookies("token", data.token, { path: "/" });
         alert("로그인에 성공하셨습니다.");
@@ -42,11 +44,13 @@ const SignInPage = () => {
         alert("정규식 위반");
       } else if (response.status === 401) {
         alert("잘못된 인증 정보 제공");
+      } else if (response.status === 404) {
+        alert("해당 api가 없음");
       } else if (response.status === 500) {
         alert("서버에러");
       }
     } catch (error) {
-      console.error("Error:", error);
+      if (error instanceof Error) console.error("Error:", error.message);
       alert("로그인 중 오류가 발생했습니다.");
     }
   };
@@ -73,14 +77,14 @@ const SignInPage = () => {
               <InputItem
                 label="아이디"
                 type="text"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
+                value="general1"
+                // onChange={(e) => setId(e.target.value)}
               />
               <InputItem
                 label="비밀번호"
                 type="password"
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
+                value="general1!"
+                // onChange={(e) => setPw(e.target.value)}
               />
             </div>
 
