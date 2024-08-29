@@ -116,7 +116,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   useEffect(() => {
     const getAlarmList = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules?${nowDate}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules?date=${nowDate}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

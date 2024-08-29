@@ -75,8 +75,7 @@ const SettingSidebar = () => {
 
   // 설정 사이드바 토글
 
-  const [settingSidebarToggle, setSettingSearchSidebarToggle] =
-    useRecoilState(settingSidebarToggleAtom);
+  const [settingSidebarToggle] = useRecoilState(settingSidebarToggleAtom);
   if (!settingSidebarToggle) {
     return null;
   }

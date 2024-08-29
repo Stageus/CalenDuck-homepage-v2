@@ -15,23 +15,20 @@ const SignInPage = () => {
   const [pw, setPw] = useState("");
 
   const signInEvent = async () => {
-    console.log("🚀   id:", id);
-    console.log("🚀   pw:", pw);
     try {
       const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
         },
         body: JSON.stringify({
           id: id,
           pw: pw,
         }),
       });
-      console.log("fetch완료🚀 🚀 🚀 ");
-      console.log("🚀 response.status:", response.status);
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         const data = await response.json();
         setCookies("token", data.token);
         alert("로그인에 성공하셨습니다.");
@@ -59,8 +56,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (cookies.token) {
-      // alert("이미 로그인 된 사용자입니다?????");
-      console.log("cookie 있음");
+      alert("이미 로그인 된 사용자입니다.");
     }
   }, [cookies.token]);
 
@@ -73,7 +69,7 @@ const SignInPage = () => {
       <article className="flex flex-col justify-center items-center w-[60%] bg-white rounded-l-[30px]">
         <div className="w-full h-[45%] flex flex-col justify-between items-center">
           <form
-            onSubmit={(e) => e.preventDefault}
+            onSubmit={(e) => e.preventDefault()}
             className="w-full flex flex-col justify-between items-center"
           >
             <div className="w-[70%] flex flex-col justify-center items-center ">

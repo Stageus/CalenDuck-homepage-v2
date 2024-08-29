@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 
 import mainLogo from "shared/imgs/mainLogo.svg";
 import InputItem from "shared/components/InputItem";
+import { useCookies } from "react-cookie";
 
 // 아이디 찾기 POST api 연결 (/users/id/find)
 const FindIdPage = () => {
+  const [cookies] = useCookies(["token"]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [verCode, setVerCode] = useState("");
@@ -18,6 +20,7 @@ const FindIdPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
         },
         body: JSON.stringify({
           name: name,
