@@ -50,6 +50,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
 
     getInterestOptions();
   }, [cookies.token]);
+
   const yearOptions = [
     "2020",
     "2021",
@@ -63,6 +64,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
     "2029",
     "2030",
   ];
+
   const monthOptions = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
   // date 값을 분해하여 초기 state 설정
@@ -108,6 +110,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
     const newDate = new Date(Number(selectedYear), Number(selectedMonth) - 1);
     setNowDate(newDate);
   }, [selectedYear, selectedMonth]);
+
   // 특정 년월 스케줄 전체 불러오기 GET api 연결 (/schedules?date)
   const [scheduleListData, setScheduleListData] = useState<TScheduleLabelItem[]>([]);
   useEffect(() => {

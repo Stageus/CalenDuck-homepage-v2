@@ -25,6 +25,7 @@ export type TRequestItem = {
 
 // main 페이지 달력 내 특정 년월 '스케줄 라벨' 전체 불러오기
 export type TScheduleLabelItem = {
+  idx: number;
   type: string; //interest || personal
   name: string; // type: interest일 때에만
   count: number;

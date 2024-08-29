@@ -83,7 +83,7 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
       {articleProps.sameMonth && (
         <div className="grid grid-cols-2">
           {scheduleListData.map((elem) => {
-            return <ScheduleNumTagItem key={elem.name} data={elem} />;
+            return <ScheduleNumTagItem key={elem.idx} data={elem} />;
           })}
         </div>
       )}
