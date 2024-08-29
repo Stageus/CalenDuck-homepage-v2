@@ -23,7 +23,7 @@ const SubmitEditedManagerBtn: React.FC<{ data: TManagerItem; newManager: string 
         body: JSON.stringify({
           beforeManagerIdx: managerIdx,
           afterManagerIdx: newManager,
-          afterInterestIdx: newManager,
+          interestIdx: newManager,
         }),
       });
 
