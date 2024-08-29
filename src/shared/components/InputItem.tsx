@@ -5,14 +5,21 @@ import visibilityOff from "shared/imgs/visibilityOff.svg";
 
 interface InputItemProps {
   label: string;
+  extraBtn?: string;
   type: string;
   placeholder?: string;
-  extraBtn?: string;
   value: string;
-  onChange?: (e: any) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBtn, value }) => {
+const InputItem: React.FC<InputItemProps> = ({
+  label,
+  type,
+  value,
+  placeholder,
+  onChange,
+  extraBtn,
+}) => {
   const [showPw, setShowPw] = useState<boolean>(false);
   const clickShowPwEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -30,6 +37,7 @@ const InputItem: React.FC<InputItemProps> = ({ label, type, placeholder, extraBt
           type={inputType}
           defaultValue={value}
           placeholder={placeholder}
+          onChange={onChange}
         />
         {type === "password" && (
           <button className="absolute top-[13px] right-[10px]" onClick={clickShowPwEvent}>

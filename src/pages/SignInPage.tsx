@@ -15,8 +15,9 @@ const SignInPage = () => {
   const [pw, setPw] = useState("");
 
   const signInEvent = async () => {
+    console.log("🚀   id:", id);
+    console.log("🚀   pw:", pw);
     try {
-      // console.log(`${process.env.REACT_APP_API_KEY}/users/login`);
       const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/login`, {
         method: "POST",
         headers: {
@@ -27,18 +28,19 @@ const SignInPage = () => {
           pw: pw,
         }),
       });
+      console.log("fetch완료🚀 🚀 🚀 ");
+      console.log("🚀 response.status:", response.status);
 
-      // console.log("::>", response);
-      if (response.status === 200) {
+      if (response.status === 201) {
         const data = await response.json();
-        setCookies("token", data.token, { path: "/" });
+        setCookies("token", data.token);
         alert("로그인에 성공하셨습니다.");
 
+        // 로그인 성공 시 페이지 이동
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         const month = String(currentDate.getMonth() + 1).padStart(2, "0");
         const formattedDate = `${year}${month}`;
-
         navigate(`/main?date=${formattedDate}`);
       } else if (response.status === 400) {
         alert("정규식 위반");
@@ -57,9 +59,10 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (cookies.token) {
-      alert("이미 로그인 된 사용자입니다");
+      // alert("이미 로그인 된 사용자입니다?????");
+      console.log("cookie 있음");
     }
-  }, [cookies.token, navigate]);
+  }, [cookies.token]);
 
   return (
     <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-keyColor ">
@@ -77,14 +80,14 @@ const SignInPage = () => {
               <InputItem
                 label="아이디"
                 type="text"
-                value="general1"
-                // onChange={(e) => setId(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
               />
               <InputItem
                 label="비밀번호"
                 type="password"
-                value="general1!"
-                // onChange={(e) => setPw(e.target.value)}
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
               />
             </div>
 
