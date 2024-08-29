@@ -26,13 +26,13 @@ const InterestListItem: React.FC<InterestListItemProps> = (props) => {
         alert("관심사가 정상적으로 추가되었습니다.");
       } else if (response.status === 401) {
         console.log("토큰 검증 실패");
-        alert("관심사 추가에 실패하셨습니다.");
+        alert("로그인 후 사용 가능합니다.");
       } else if (response.status === 404) {
         console.log("잘못된 인증 정보 제공");
         alert("관심사 추가에 실패하셨습니다.");
       } else if (response.status === 409) {
         console.log("계정이 하나의 관심사를 여러 번 추가할 때");
-        alert("관심사 추가에 실패하셨습니다.");
+        alert("이미 추가된 관심사입니다.");
       }
     } catch (error) {
       console.error("Error:", error);
