@@ -10,8 +10,8 @@ const DropDownItem: React.FC<DropDownItemProps> = ({ options, value, onChange })
   return (
     <select value={value} onChange={onChange} className="focus:outline-none">
       {options.map((option: any, index: number) => (
-        <option key={index} value={typeof option === "string" ? option : option.value}>
-          {typeof option === "string" ? option : option.label}
+        <option key={index} value={typeof option === "string" || "number" ? option : option.value}>
+          {typeof option === "string" || "number" ? option : option.label}
         </option>
       ))}
     </select>

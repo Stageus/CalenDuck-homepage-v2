@@ -16,7 +16,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [cookies] = useCookies(["token"]);
-  const [interestOptions, setInterestOptions] = useState<string[]>([]);
+  const [interestOptions, setInterestOptions] = useState<string[]>(["전체보기"]);
 
   const urlSearch = new URLSearchParams(location.search);
   const initialDate =
@@ -47,9 +47,10 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
         console.error("서버 에러: ", error);
       }
     };
+    console.log("🚀   interestOptions:", interestOptions);
 
     getInterestOptions();
-  }, [cookies.token]);
+  }, [cookies.token, interestOptions]);
 
   const yearOptions = [
     "2020",
@@ -145,7 +146,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   // useEffect(() => {
   //   let queryString = `/main?date=${initialDate}`;
   //   if (status === "manager" && managingInterest) {
-  //     queryString += `&interest=${managingInterest}`;
+  //     navigate(`&/main?date=${initialDate}&interest=${managingInterest}`);
   //   }
   // }, [initialDate, status, managingInterest]);
 
@@ -161,11 +162,14 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
           </div>
         ) : (
           // general 계정으로 로그인
-          <DropDownItem
-            options={interestOptions}
-            value={selectedInterest}
-            onChange={handleInterestChange}
-          />
+          // 추가한 관심사가 있다면
+          interestOptions && (
+            <DropDownItem
+              options={interestOptions}
+              value={selectedInterest}
+              onChange={handleInterestChange}
+            />
+          )
         )}
 
         <DropDownItem options={yearOptions} value={selectedYear} onChange={handleYearChange} />

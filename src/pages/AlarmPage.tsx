@@ -51,31 +51,28 @@ const AlarmPage = () => {
     }
   }, [navigate, cookies.token]);
 
-  useEffect(() => {
-    const getAlarmList = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/notifications`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          body: JSON.stringify({
-            page: 1,
-          }),
-        });
-        const result = await response.json();
-        if (response.status === 200) {
-          setNotifListData(result.list);
-        } else if (response.status === 401) {
-          console.log("잘못된 인증 정보 제공");
-        }
-      } catch (error) {
-        console.error("서버 에러: ", error);
-      }
-    };
-    getAlarmList();
-  }, [cookies.token]);
+  // useEffect(() => {
+  //   const getAlarmList = async () => {
+  //     try {
+  //       const response = await fetch(`${process.env.REACT_APP_API_KEY}/notifications`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //       });
+  //       const result = await response.json();
+  //       if (response.status === 200) {
+  //         setNotifListData(result.list);
+  //       } else if (response.status === 401) {
+  //         console.log("잘못된 인증 정보 제공");
+  //       }
+  //     } catch (error) {
+  //       console.error("서버 에러: ", error);
+  //     }
+  //   };
+  //   getAlarmList();
+  // }, [cookies.token]);
 
   return (
     <>
