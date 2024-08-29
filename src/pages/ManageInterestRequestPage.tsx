@@ -7,7 +7,7 @@ import RequestItem from "widgets/manageRequests/RequestItem";
 import { TRequestItem } from "types";
 import { useCookies } from "react-cookie";
 
-// 관리자 요청 문의 불러오기 GET api 연결 (/master/asks?category_idx)
+// 관리자 요청 문의 불러오기 GET api 연결 (/master/asks?categoryIdx=1)
 const ManageInterestRequestPage = () => {
   const location = useLocation();
   const [requestListData, setRequestListData] = useState<TRequestItem[]>([]);
@@ -16,7 +16,7 @@ const ManageInterestRequestPage = () => {
   useEffect(() => {
     const getRequestsList = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/master/asks?1`, {
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/master/asks?categoryIdx=1`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

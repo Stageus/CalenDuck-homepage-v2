@@ -7,7 +7,7 @@ import RequestItem from "widgets/manageRequests/RequestItem";
 import { TRequestItem } from "types";
 import { useCookies } from "react-cookie";
 
-// 기타 문의 목록 불러오기 GET api 연결 (/master/asks?category_idx)
+// 기타 문의 목록 불러오기 GET api 연결 (/master/asks?categoryIdx=2)
 const ManageEtcRequestPage = () => {
   const location = useLocation();
   const [requestListData, setRequestListData] = useState<TRequestItem[]>([]);
@@ -16,7 +16,7 @@ const ManageEtcRequestPage = () => {
   useEffect(() => {
     const getRequestsList = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/master/asks?2`, {
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/master/asks?categoryIdx=2`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
