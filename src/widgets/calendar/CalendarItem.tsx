@@ -142,12 +142,12 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   const [status] = useState<string>("general"); // 혹은 "manager"
   const managingInterest = urlSearch.get("interest");
 
-  useEffect(() => {
-    let queryString = `/main?date=${initialDate}`;
-    if (status === "manager" && managingInterest) {
-      queryString += `&interest=${managingInterest}`;
-    }
-  }, [initialDate, status, managingInterest]);
+  // useEffect(() => {
+  //   let queryString = `/main?date=${initialDate}`;
+  //   if (status === "manager" && managingInterest) {
+  //     queryString += `&interest=${managingInterest}`;
+  //   }
+  // }, [initialDate, status, managingInterest]);
 
   return (
     <section className="w-full h-[80vh] flex flex-col mt-[70px]">
