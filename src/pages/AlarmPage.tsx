@@ -7,16 +7,16 @@ import AlarmItem from "widgets/AlarmItem";
 
 // 알림 데이터 타입 정의
 interface NotifData {
-  id: string;
-  date: string;
-  type: number;
-  interestName?: string;
-  title: string;
-  content: string;
-  reply?: string;
+  _id: number; // 알림 idx
+  type: number; // 알림 종류
+  date: string; // 알림 생성 시간
+  interestName?: string; // 매니저로 지정된 관심사 이름
+  content: string; // 스케쥴 내용
+  title: string; // 작성한 문의 제목
+  reply?: string; // 작성된 문의의 답변
 }
 
-// 알림 목록 불러오기 GET api 연결 (/notifications)
+// 알림 목록 불러오기 GET api 연결 (/notifications?ㅔ)
 const AlarmPage = () => {
   // const dummyData = [
   //   {
@@ -51,28 +51,31 @@ const AlarmPage = () => {
     }
   }, [navigate, cookies.token]);
 
-  // useEffect(() => {
-  //   const getAlarmList = async () => {
-  //     try {
-  //       const response = await fetch(`${process.env.REACT_APP_API_KEY}/notifications`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${cookies.token}`,
-  //         },
-  //       });
-  //       const result = await response.json();
-  //       if (response.status === 200) {
-  //         setNotifListData(result.list);
-  //       } else if (response.status === 401) {
-  //         console.log("잘못된 인증 정보 제공");
-  //       }
-  //     } catch (error) {
-  //       console.error("서버 에러: ", error);
-  //     }
-  //   };
-  //   getAlarmList();
-  // }, [cookies.token]);
+  useEffect(() => {
+    const getAlarmList = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/notifications?page=1`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
+        const result = await response.json();
+
+        if (response.status === 200) {
+          setNotifListData(result.list);
+        } else if (response.status === 400) {
+          console.log("잘못된 인증 정보 제공");
+        } else if (response.status === 401) {
+          console.log("잘못된 인증 정보 제공");
+        }
+      } catch (error) {
+        console.error("서버 에러: ", error);
+      }
+    };
+    getAlarmList();
+  }, [cookies.token, notifListData]);
 
   return (
     <>
@@ -82,21 +85,22 @@ const AlarmPage = () => {
       </div>
 
       {notifListData.length > 0 ? (
-        <section className="mt-[120px] flex justify-start items-center">
+        <section className="mt-[120px] flex flex-col justify-center items-start">
+          {/* {}
           <h2 className="font-bold text-l mt-7 mb-2">오늘 받은 알림</h2>
-          <article className="flex flex-col items-center justify-start">
+          <article className="w-full flex flex-col items-center justify-start">
             {notifListData.map((elem) => {
-              return <AlarmItem key={elem.id} data={elem} />;
+              return <AlarmItem key={elem.idx} data={elem} />;
             })}
-          </article>
+          </article> */}
 
           <div className="flex items-end mt-7 mb-2">
-            <h2 className="font-bold text-l mr-5">이전 알림</h2>
+            {/* <h2 className="font-bold text-l mr-5">이전 알림</h2> */}
             <span className="text-xs text-alertColor">30일 후 자동 삭제 됩니다</span>
           </div>
-          <article className="flex flex-col items-center justify-start">
+          <article className="w-full flex flex-col items-center justify-start">
             {notifListData.map((elem) => {
-              return <AlarmItem key={elem.id} data={elem} />;
+              return <AlarmItem key={elem._id} data={elem} />;
             })}
           </article>
         </section>
