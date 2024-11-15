@@ -10,8 +10,8 @@ export const useCheckDuplicateId = (
   props: UseMutationOptions<void, AxiosError, CheckDuplicateIdDto>
 ) => {
   return useMutation({
-    mutationFn: async (parma: CheckDuplicateIdDto) => {
-      await axiosInstance.post<void>(process.env.REACT_APP_API_KEY + "/users/check-id", parma);
+    mutationFn: async (param: CheckDuplicateIdDto) => {
+      await axiosInstance.post<void>(process.env.REACT_APP_API_KEY + "/users/check-id", param);
     },
     onError(err) {
       const statusCode = err.response?.status;
