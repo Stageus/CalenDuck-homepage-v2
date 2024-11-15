@@ -7,6 +7,7 @@ import mainLogo from "shared/imgs/mainLogo.svg";
 import InputItem from "shared/components/InputItem";
 import { useCheckDuplicateId } from "./hooks/useCheckDuplicateId";
 import { useSendEmailAuthCode } from "./hooks/useSendEmailAuthCode";
+import { useCheckEmailAuthCode } from "./hooks/useCheckEmailAuthCode";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -15,8 +16,11 @@ const SignUpPage = () => {
   const [pw, setPw] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [authCode, setAuthCode] = useState("");
 
+  const [isSendAuthCode, setIsSendAuthCode] = useState(false);
   const [isSuccessDuplicateIdCheck, setIsSuccessDuplicateIdCheck] = useState(false);
+  const [isSuccessEmailAuthCheck, setIsSuccessEmailAuthCheck] = useState(false);
 
   const signUpEvent = async () => {
     try {
@@ -77,10 +81,18 @@ const SignUpPage = () => {
   const { mutate: sendEmailAuthCode, isPending: isPendingSendEmailAuthCode } = useSendEmailAuthCode(
     {
       onSuccess() {
+        setIsSendAuthCode(true);
         alert("이메일 인증번호가 발송되었습니다.");
       },
     }
   );
+
+  const { mutate: checkEmailAuthCode } = useCheckEmailAuthCode({
+    onSuccess() {
+      setIsSuccessEmailAuthCheck(true);
+      alert("인증 성공");
+    },
+  });
 
   // 체크된 아이템이 두 개 모두 있을 경우 signUpBtn 활성화, 하나라도 체크가 안 되었을 경우 비활성화
   const requiredCheckboxes = ["이용약관", "개인정보 수집 및 동의"];
@@ -132,9 +144,29 @@ const SignUpPage = () => {
                   checkDuplicated: true,
                 });
               }}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setIsSendAuthCode(false);
+                setEmail(e.target.value);
+              }}
             />
-            <InputItem label="인증번호" type="text" extraBtn="인증 확인" value="" />
+            <InputItem
+              label="인증번호"
+              type="text"
+              extraBtn="인증 확인"
+              value=""
+              onClickExtraBtn={() => {
+                if (!isSendAuthCode) {
+                  return alert("이메일 인증 코드가 발송되지 않은 이메일입니다.");
+                }
+
+                checkEmailAuthCode({
+                  email,
+                  code: Number(authCode),
+                  pageType: "signup",
+                });
+              }}
+              onChange={(e) => setAuthCode(e.target.value)}
+            />
           </div>
 
           <div className="flex flex-col w-[70%] mb-[10px]">
