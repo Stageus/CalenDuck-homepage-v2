@@ -88,7 +88,8 @@ const SignUpPage = () => {
   );
 
   const { mutate: checkEmailAuthCode } = useCheckEmailAuthCode({
-    onSuccess() {
+    onSuccess(data) {
+      console.log(data);
       setIsSuccessEmailAuthCheck(true);
       alert("인증 성공");
     },
@@ -161,7 +162,7 @@ const SignUpPage = () => {
 
                 checkEmailAuthCode({
                   email,
-                  code: Number(authCode),
+                  code: authCode,
                   pageType: "signup",
                 });
               }}

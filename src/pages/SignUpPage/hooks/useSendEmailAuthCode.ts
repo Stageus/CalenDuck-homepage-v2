@@ -12,7 +12,7 @@ export const useSendEmailAuthCode = (
 ) => {
   return useMutation({
     async mutationFn(param: SendEmailAuthCodeDto) {
-      await axiosInstance.post<void>(process.env.REACT_APP_API_KEY + "/auth/email", param);
+      await axiosInstance.post<void>("/auth/email", param);
     },
     onError(err) {
       const statusCode = err.response?.status;

@@ -4,7 +4,7 @@ import axiosInstance from "../../../shared/utils/axios";
 
 type CheckEmailAuthCodeDto = {
   email: string;
-  code: number;
+  code: string;
   pageType: string;
 };
 
