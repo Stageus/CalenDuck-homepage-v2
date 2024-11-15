@@ -10,6 +10,7 @@ interface InputItemProps {
   placeholder?: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickExtraBtn?: () => void;
 }
 
 const InputItem: React.FC<InputItemProps> = ({
@@ -19,6 +20,7 @@ const InputItem: React.FC<InputItemProps> = ({
   placeholder,
   onChange,
   extraBtn,
+  onClickExtraBtn,
 }) => {
   const [showPw, setShowPw] = useState<boolean>(false);
   const clickShowPwEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,7 +48,10 @@ const InputItem: React.FC<InputItemProps> = ({
         )}
 
         {extraBtn && (
-          <button className="absolute bg-subColor top-[8px] right-[10px] px-[10px] py-[5px] rounded-[10px]">
+          <button
+            className="absolute bg-subColor top-[8px] right-[10px] px-[10px] py-[5px] rounded-[10px]"
+            onClick={onClickExtraBtn}
+          >
             {extraBtn}
           </button>
         )}
