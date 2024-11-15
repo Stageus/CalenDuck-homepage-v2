@@ -5,8 +5,8 @@ import { useCookies } from "react-cookie";
 
 import mainLogo from "shared/imgs/mainLogo.svg";
 import InputItem from "shared/components/InputItem";
+import { useCheckDuplicateId } from "./hooks/useCheckDuplicateId";
 
-// 회원가입 POST api 연결 (/users)
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
@@ -66,40 +66,12 @@ const SignUpPage = () => {
     }
   };
 
-  /**
-   * 아이디 중복확인 API
-   */
-  const duplicateIdCheckButtonClickEvent = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/check-id`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-        }),
-      });
-
-      if (response.ok) {
-        alert("사용 가능한 아이디입니다.");
-        setIsSuccessDuplicateIdCheck(true);
-        return;
-      }
-
-      if (response.status === 400) {
-        return alert("유효하지 않은 아이디입니다.");
-      }
-
-      if (response.status === 409) {
-        return alert("이미 가입된 아이디입니다.");
-      }
-
-      return alert("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    } catch (err) {
-      alert("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
+  const { mutate: checkDuplicateId } = useCheckDuplicateId({
+    onSuccess() {
+      alert("사용 가능한 아이디입니다.");
+      setIsSuccessDuplicateIdCheck(true);
+    },
+  });
 
   // 체크된 아이템이 두 개 모두 있을 경우 signUpBtn 활성화, 하나라도 체크가 안 되었을 경우 비활성화
   const requiredCheckboxes = ["이용약관", "개인정보 수집 및 동의"];
@@ -123,7 +95,7 @@ const SignUpPage = () => {
               type="text"
               placeholder="6~12글자로 입력해주세요"
               extraBtn="중복확인"
-              onClickExtraBtn={duplicateIdCheckButtonClickEvent}
+              onClickExtraBtn={() => checkDuplicateId({ id })}
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
