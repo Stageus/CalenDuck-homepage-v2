@@ -8,8 +8,16 @@ import InputItem from "shared/components/InputItem";
 import { useCheckDuplicateId } from "./hooks/useCheckDuplicateId";
 import { useSendEmailAuthCode } from "./hooks/useSendEmailAuthCode";
 import { useCheckEmailAuthCode } from "./hooks/useCheckEmailAuthCode";
+import { useSignUp } from "./hooks/useSignUp";
 
 const SignUpPage = () => {
+  const ID_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/; // 영어 + 숫자, 각 최소 1개 이상, 6~12
+  const PW_REGEX =
+    /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[a-zA-Z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,16}$/; // 영어 + 숫자 + 특수문자, 각 최소 1개 이상, 8~16
+  const EMAIL_REGEX =
+    /^(?!\.)(?!.*\.\.)(?=.{5,320})[a-zA-Z\d.!#$%&'*+/=?^_{|}~-]{1,64}(?<!\.)@(?!-)(?!.*--)(?=.{3,255}$)([a-zA-Z\d-]{1,63}(?:\.[a-zA-Z\d-]{1,63})*(?<!-)\.[a-zA-Z]{1,63})$/;
+  const NICKNAME_REGEX = /^[a-zA-Zㄱ-ㅎ가-힣]{2,32}$/;
+
   const navigate = useNavigate();
   const [cookies, setCookies] = useCookies(["token"]);
   const [id, setId] = useState("");
@@ -17,41 +25,13 @@ const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [authCode, setAuthCode] = useState("");
+  const [emailAuthToken, setEmailAuthToken] = useState("");
 
   const [isSendAuthCode, setIsSendAuthCode] = useState(false);
   const [isSuccessDuplicateIdCheck, setIsSuccessDuplicateIdCheck] = useState(false);
   const [isSuccessEmailAuthCheck, setIsSuccessEmailAuthCheck] = useState(false);
 
-  const signUpEvent = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          pw: pw,
-          name: name,
-          email: email,
-        }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setCookies("token", data.token, { path: "/" });
-        alert("회원가입에 성공하셨습니다.");
-        navigate("/");
-      } else {
-        alert("회원가입에 실패하셨습니다.");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("회원가입 중 오류가 발생했습니다.");
-    }
-  };
-
   const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [isSignUpBtnDisabled, setIsSignUpBtnDisabled] = useState(true);
 
   // 하나의 checkbox 클릭에 따른 토글 onChange
   const toggleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +42,9 @@ const SignUpPage = () => {
       prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
   };
+
   // 전체동의 누를 경우 아래 checkbox 모두 속성 checked
+  const requiredCheckboxes = ["이용약관", "개인정보 수집 및 동의"];
   const toggleSelectAll = () => {
     if (checkedList.length === requiredCheckboxes.length) {
       setCheckedList([]);
@@ -90,16 +72,19 @@ const SignUpPage = () => {
   const { mutate: checkEmailAuthCode } = useCheckEmailAuthCode({
     onSuccess(data) {
       console.log(data);
+      setEmailAuthToken(data.emailToken);
       setIsSuccessEmailAuthCheck(true);
       alert("인증 성공");
     },
   });
 
+  const { mutate: signup } = useSignUp({
+    onSuccess() {
+      navigate("/main");
+    },
+  });
+
   // 체크된 아이템이 두 개 모두 있을 경우 signUpBtn 활성화, 하나라도 체크가 안 되었을 경우 비활성화
-  const requiredCheckboxes = ["이용약관", "개인정보 수집 및 동의"];
-  useEffect(() => {
-    setIsSignUpBtnDisabled(checkedList.length !== requiredCheckboxes.length);
-  }, [checkedList]);
 
   return (
     <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-keyColor ">
@@ -115,9 +100,17 @@ const SignUpPage = () => {
               type="text"
               placeholder="6~12글자로 입력해주세요"
               extraBtn="중복확인"
-              onClickExtraBtn={() => checkDuplicateId({ id })}
+              onClickExtraBtn={() => {
+                if (!ID_REGEX.test(id)) {
+                  return alert("아이디는 영어와 숫자로 이루어진 6~12글자이어야 합니다.");
+                }
+                checkDuplicateId({ id });
+              }}
               value={id}
-              onChange={(e) => setId(e.target.value)}
+              onChange={(e) => {
+                setId(e.target.value);
+                setIsSuccessDuplicateIdCheck(false);
+              }}
             />
             <InputItem
               label="비밀번호"
@@ -140,12 +133,17 @@ const SignUpPage = () => {
               onClickExtraBtn={() => {
                 if (isPendingSendEmailAuthCode) return;
 
+                if (!EMAIL_REGEX.test(email)) {
+                  return alert("이메일 형식이 유효하지 않습니다.");
+                }
+
                 sendEmailAuthCode({
                   email,
                   checkDuplicated: true,
                 });
               }}
               onChange={(e) => {
+                setIsSuccessEmailAuthCheck(false);
                 setIsSendAuthCode(false);
                 setEmail(e.target.value);
               }}
@@ -217,9 +215,42 @@ const SignUpPage = () => {
 
           <div className="w-[70%] flex flex-col justify-between items-center">
             <button
-              disabled={isSignUpBtnDisabled}
               className="w-full py-[10px] mb-[10px] bg-keyColor rounded-[5px] font-bold"
-              onClick={signUpEvent}
+              onClick={() => {
+                if (checkedList.length !== requiredCheckboxes.length) {
+                  return alert("약관 동의는 필수입니다.");
+                }
+
+                if (!ID_REGEX.test(id)) {
+                  return alert("아이디는 영어와 숫자로 이루어진 6~12글자이어야 합니다.");
+                }
+
+                if (!PW_REGEX.test(pw)) {
+                  return alert("비밀번호는 영어와 숫자, 특수문자로 이루어진 8~16글자이어 합니다.");
+                }
+
+                if (!NICKNAME_REGEX.test(name)) {
+                  return alert(
+                    "닉네임은 알파벳 또는 한글로 이루어진 2글자 이상 글자이어야 합니다."
+                  );
+                }
+
+                if (!isSuccessDuplicateIdCheck) {
+                  return alert("아이디 중복검사는 필수입니다.");
+                }
+
+                if (!isSuccessEmailAuthCheck) {
+                  return alert("이메일 인증이 완료되지 않았습니다.");
+                }
+
+                signup({
+                  id,
+                  email,
+                  nickname: name,
+                  pw,
+                  emailToken: emailAuthToken,
+                });
+              }}
             >
               회원가입
             </button>

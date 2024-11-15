@@ -8,17 +8,21 @@ type CheckEmailAuthCodeDto = {
   pageType: string;
 };
 
-type CheckEmailAuthCodeResponseDto = {};
+type CheckEmailAuthCodeResponseDto = {
+  emailToken: string;
+};
 
 export const useCheckEmailAuthCode = (
   options: UseMutationOptions<CheckEmailAuthCodeResponseDto, AxiosError, CheckEmailAuthCodeDto>
 ) =>
   useMutation({
     async mutationFn(param: CheckEmailAuthCodeDto) {
-      return await axiosInstance.post<CheckEmailAuthCodeResponseDto>(
+      const { data } = await axiosInstance.post<CheckEmailAuthCodeResponseDto>(
         process.env.REACT_APP_API_KEY + "/auth/check-code",
         param
       );
+
+      return data;
     },
     onError(err) {
       const status = err.response?.status;
