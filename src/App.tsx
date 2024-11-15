@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // General
 import SignInPage from "pages/SignInPage";
-import SignUpPage from "pages/SignUpPage";
+import SignUpPage from "pages/SignUpPage/index";
 import FindIdPage from "pages/FindIdPage";
 import FindPwPage from "pages/FindPwPage";
 import SetNewPwPage from "pages/SetNewPwPage";
