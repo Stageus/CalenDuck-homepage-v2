@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import mainLogo from "shared/imgs/mainLogo.svg";
 import InputItem from "shared/components/InputItem";
 import { useCheckDuplicateId } from "./hooks/useCheckDuplicateId";
+import { useSendEmailAuthCode } from "./hooks/useSendEmailAuthCode";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -73,13 +74,19 @@ const SignUpPage = () => {
     },
   });
 
+  const { mutate: sendEmailAuthCode, isPending: isPendingSendEmailAuthCode } = useSendEmailAuthCode(
+    {
+      onSuccess() {
+        alert("이메일 인증번호가 발송되었습니다.");
+      },
+    }
+  );
+
   // 체크된 아이템이 두 개 모두 있을 경우 signUpBtn 활성화, 하나라도 체크가 안 되었을 경우 비활성화
   const requiredCheckboxes = ["이용약관", "개인정보 수집 및 동의"];
   useEffect(() => {
     setIsSignUpBtnDisabled(checkedList.length !== requiredCheckboxes.length);
   }, [checkedList]);
-
-  // 회원가입 버튼 클릭 이벤트
 
   return (
     <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-keyColor ">
@@ -117,6 +124,14 @@ const SignUpPage = () => {
               type="email"
               extraBtn="번호 전송"
               value={email}
+              onClickExtraBtn={() => {
+                if (isPendingSendEmailAuthCode) return;
+
+                sendEmailAuthCode({
+                  email,
+                  checkDuplicated: true,
+                });
+              }}
               onChange={(e) => setEmail(e.target.value)}
             />
             <InputItem label="인증번호" type="text" extraBtn="인증 확인" value="" />
