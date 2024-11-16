@@ -6,57 +6,40 @@ import { useNavigate } from "react-router-dom";
 
 import mainLogo from "shared/imgs/mainLogo.svg";
 import InputItem from "shared/components/InputItem";
+import { useLogin } from "./hooks/useLogin";
 
-// 로그인 PUT api 연결 (/users/login)
 const SignInPage = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
 
-  const signInEvent = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-        body: JSON.stringify({
-          id: id,
-          pw: pw,
-        }),
-      });
+  const redirectToMainPage = (year?: string, month?: string) => {
+    const date = new Date();
 
-      if (response.status === 200) {
-        const data = await response.json();
-        setCookies("token", data.token);
-        alert("로그인에 성공하셨습니다.");
-
-        // 로그인 성공 시 페이지 이동
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-        const formattedDate = `${year}${month}`;
-        navigate(`/main?date=${formattedDate}`);
-      } else if (response.status === 400) {
-        alert("정규식 위반");
-      } else if (response.status === 401) {
-        alert("잘못된 인증 정보 제공");
-      } else if (response.status === 404) {
-        alert("해당 api가 없음");
-      } else if (response.status === 500) {
-        alert("서버에러");
-      }
-    } catch (error) {
-      if (error instanceof Error) console.error("Error:", error.message);
-      alert("로그인 중 오류가 발생했습니다.");
+    if (!year) {
+      year = date.getFullYear().toString();
     }
+
+    if (!month) {
+      month = String(date.getMonth() + 1).padStart(2, "0");
+    }
+
+    navigate(`/main?date=${year}${month}`);
   };
+
+  const { mutate: login } = useLogin({
+    onSuccess(data) {
+      setCookies("token", data.token);
+      alert("로그인에 성공하셨습니다.");
+
+      redirectToMainPage();
+    },
+  });
 
   useEffect(() => {
     if (cookies.token) {
-      alert("이미 로그인 된 사용자입니다.");
+      redirectToMainPage();
     }
   }, [cookies.token]);
 
@@ -89,7 +72,7 @@ const SignInPage = () => {
 
             <div className="flex flex-col w-[70%]">
               <button
-                onClick={signInEvent}
+                onClick={() => login({ id, pw })}
                 className="w-full py-[10px] mb-[10px] bg-keyColor rounded-[5px] font-bold"
               >
                 로그인
