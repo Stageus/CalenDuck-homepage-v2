@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import HeaderSidebarContainer from "shared/components/HeaderSidebarContainer";
 import CalendarItem from "widgets/calendar/CalendarItem";
@@ -22,11 +22,17 @@ const MainPage = () => {
     openScheduleModalEvent();
   };
 
+  const [calendarComponentKey, setCalendarComponentKey] = useState(1);
+
+  const updateCalendarComponentKey = () => {
+    setCalendarComponentKey((value) => value + 1);
+  };
+
   return (
     <>
       <HeaderSidebarContainer />
       <article className="flex flex-col flex-grow">
-        <CalendarItem onDateClick={handleDateClick} />
+        <CalendarItem onDateClick={handleDateClick} key={calendarComponentKey} />
       </article>
 
       {/* 스케줄 모달 */}
@@ -36,7 +42,7 @@ const MainPage = () => {
             className="fixed inset-0 bg-lightgrayColor opacity-50"
             onClick={openScheduleModalEvent}
           ></div>
-          <ScheduleModal />
+          <ScheduleModal updateCalendarComponentKey={updateCalendarComponentKey} />
         </div>
       )}
     </>

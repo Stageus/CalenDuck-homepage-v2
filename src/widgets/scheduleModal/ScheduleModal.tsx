@@ -5,11 +5,14 @@ import DropDownItem from "shared/components/DropDownItem";
 import { useRecoilValue } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { useCookies } from "react-cookie";
-import { TScheduleItem } from "types";
 import PostNewPersonalScheduleItem from "./PostNewPersonalScheduleItem";
 import { useGetScheduleByDate } from "./hooks/useGetScheduleByDate";
 
-const ScheduleModal: React.FC = () => {
+type Props = {
+  updateCalendarComponentKey: () => void;
+};
+
+const ScheduleModal: React.FC<Props> = ({ updateCalendarComponentKey }: Props) => {
   const selectedDate = useRecoilValue(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
   const month = selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
@@ -19,7 +22,7 @@ const ScheduleModal: React.FC = () => {
   const [cookies] = useCookies(["token"]);
   const [interestOptions, setInterestOptions] = useState<string[]>([]);
 
-  const { data: scheduleData } = useGetScheduleByDate(fullDate);
+  const { data: scheduleData, refetch: refetchScheduleByDate } = useGetScheduleByDate(fullDate);
 
   // 관심사 카테고리 선택 GET api 연결 (/interests)
   useEffect(() => {
@@ -64,7 +67,10 @@ const ScheduleModal: React.FC = () => {
           <div className="font-bold	text-xl">{`${year}/${month}/${date}`}</div>
         </article>
 
-        <PostNewPersonalScheduleItem />
+        <PostNewPersonalScheduleItem
+          refetchScheduleByDate={refetchScheduleByDate}
+          updateCalendarComponentKey={updateCalendarComponentKey}
+        />
 
         {/* 해당 날짜의 스케줄 리스트 */}
         <article className="flex flex-col items-center justify-start h-[70%] overflow-auto">

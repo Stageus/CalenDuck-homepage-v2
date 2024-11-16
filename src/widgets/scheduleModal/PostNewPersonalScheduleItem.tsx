@@ -6,7 +6,15 @@ import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { useCreatePersonalSchedule } from "./hooks/useCreatePersonalSchedule";
 
-const PostNewPersonalScheduleItem = () => {
+type Props = {
+  refetchScheduleByDate: () => void;
+  updateCalendarComponentKey: () => void;
+};
+
+const PostNewPersonalScheduleItem = ({
+  refetchScheduleByDate,
+  updateCalendarComponentKey,
+}: Props) => {
   // 스케줄 알람 여부 토글
   const [alarm, setAlarm] = useState<boolean>(false);
   const clickSetAlarmEvent = () => {
@@ -21,7 +29,13 @@ const PostNewPersonalScheduleItem = () => {
   const date = selectedDate && selectedDate.getDate().toString().padStart(2, "0");
 
   const { mutate: createPersonalSchedule } = useCreatePersonalSchedule({
-    onSuccess() {},
+    onSuccess() {
+      alert("스케줄이 생성되었습니다.");
+      setScheduleTime("");
+      setPersonalContents("");
+      refetchScheduleByDate();
+      updateCalendarComponentKey();
+    },
   });
 
   return (
@@ -39,12 +53,17 @@ const PostNewPersonalScheduleItem = () => {
             </div>
           )}
           <div>
-            <input type="time" onChange={(e) => setScheduleTime(e.target.value)} />
+            <input
+              type="time"
+              value={scheduleTime}
+              onChange={(e) => setScheduleTime(e.target.value)}
+            />
           </div>
           <input
             type="text"
             className="w-[350px] border border-alertColor outline-alertColor bg-transparent p-[10px] ml-[30px] items-center"
             maxLength={100}
+            value={personalContents}
             onChange={(e) => setPersonalContents(e.target.value)}
           />
         </div>
