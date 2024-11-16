@@ -7,7 +7,7 @@ import SignUpPage from "pages/SignUpPage/index";
 import FindIdPage from "pages/FindIdPage";
 import FindPwPage from "pages/FindPwPage";
 import SetNewPwPage from "pages/SetNewPwPage";
-import MainPage from "pages/MainPage";
+import MainPage from "pages/MainPage/index";
 import AlarmPage from "pages/AlarmPage";
 import ContactPage from "pages/ContactPage";
 
