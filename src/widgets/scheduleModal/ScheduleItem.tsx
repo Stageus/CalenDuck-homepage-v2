@@ -71,17 +71,13 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
       if (response.ok) {
         alert(`스케줄 수정을 완료했습니다.`);
       } else if (response.status === 400) {
-        console.log("정규식 위반");
         alert(`글자수 제한에 유의해주세요.`);
       } else if (response.status === 401) {
-        console.log("잘못된 인증 정보 제공");
         alert(`스케줄 수정에 실패했습니다.`);
       } else if (response.status === 404) {
-        console.log("해당 관심사 스케줄이 없음");
         alert(`스케줄 수정에 실패했습니다.`);
       }
     } catch (error) {
-      console.error("Error:", error);
       alert(`스케줄 수정 중 오류가 발생했습니다.`);
     }
   };
