@@ -6,12 +6,13 @@ import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { TScheduleLabelItem } from "types";
 
 import ScheduleNumTagItem from "widgets/calendar/ScheduleNumTagItem";
+import { classNames } from "../../shared/utils/classNames";
 
 interface Props {
   day: Date;
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
-  scheduleListData: TScheduleLabelItem[];
+  scheduleListData?: TScheduleLabelItem[];
 }
 
 interface ArticleProps {
@@ -77,14 +78,27 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
   return (
     <button
       onClick={articleProps.sameMonth ? openScheduleModalEvent : undefined}
-      className={`border justify-center items-center grid flex-wrap content-between ${dayClassNames}`}
+      className={`relative border justify-center items-center h-[180px] flex-wrap content-between ${dayClassNames}`}
     >
-      <p className={numClassNames}>{day.getDate()}</p>
+      <p className={classNames(numClassNames, "absolute top-0 right-[10px] text-[24px]")}>
+        {day.getDate()}
+      </p>
       {articleProps.sameMonth && (
-        <div className="grid grid-cols-2">
-          {scheduleListData.map((elem) => {
-            return <ScheduleNumTagItem key={elem.idx} data={elem} />;
-          })}
+        <div className="flex flex-wrap justify-center">
+          {scheduleListData &&
+            scheduleListData.map((elem) => {
+              return (
+                <ScheduleNumTagItem
+                  key={1}
+                  data={{
+                    idx: elem.idx,
+                    count: elem.count,
+                    type: elem.type,
+                    name: elem.name,
+                  }}
+                />
+              );
+            })}
         </div>
       )}
     </button>

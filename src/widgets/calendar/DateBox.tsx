@@ -33,12 +33,21 @@ const monthList = (nowDate: Date) => {
 interface Props {
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
-  scheduleListData: TScheduleLabelItem[];
+  scheduleListData: TScheduleLabelItem[][];
 }
 
 const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
   const allDay: Date[] = monthList(nowDate);
+
   const weeks = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+  /**
+   * 해당 달 1일 이전으로 표시되는 이전 달 날짜 개수
+   */
+  let count = 0;
+  allDay.forEach((date) => {
+    if (date.getMonth() !== nowDate.getMonth()) count++;
+  });
 
   return (
     <article className="w-full h-[70vh] grid grid-cols-7 ">
@@ -46,14 +55,18 @@ const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
         return <WeekBox key={week} weekName={week} />;
       })}
 
-      {allDay.map((day: Date) => {
+      {allDay.map((date, i) => {
+        const firstDateOfMonth = new Date();
+        firstDateOfMonth.setMonth(date.getMonth());
+        firstDateOfMonth.setFullYear(date.getFullYear());
+
         return (
           <AllDay
-            key={day.toISOString()}
-            day={day}
+            key={date.toISOString()}
+            day={date}
             nowDate={nowDate}
             setNowDate={setNowDate}
-            scheduleListData={scheduleListData}
+            scheduleListData={scheduleListData[i - count]}
           />
         );
       })}

@@ -31,7 +31,7 @@ export const useCreatePersonalSchedule = (
       const statusCode = err.response?.status;
 
       if (statusCode === 400) {
-        return alert("");
+        return alert("내용은 최대 100글자까지 작성할 수 있습니다.");
       }
 
       if (statusCode === 401) {
