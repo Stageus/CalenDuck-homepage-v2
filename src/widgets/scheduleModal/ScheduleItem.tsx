@@ -20,6 +20,16 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
     setAlarm(!alarm);
   };
 
+  const getTimeString = (time: string) => {
+    const date = new Date(time);
+
+    return (
+      date.getHours().toString().padStart(2, "0") +
+      " : " +
+      date.getMinutes().toString().padStart(2, "0")
+    );
+  };
+
   // 수정 중인 타이틀 반영
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +43,7 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
       titleRef.current.value = contents;
     }
   };
-
+  // Edit을 위한 값
   const [scheduleContents, setScheduleContents] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
   const [selectedDate] = useRecoilState(selectedDateAtom);
@@ -96,7 +106,7 @@ const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
         {editing ? (
           <input type="time" onChange={(e) => setScheduleTime(e.target.value)} />
         ) : (
-          <div className="w-[15%]">{time}</div>
+          <div className="w-[15%]">{getTimeString(time)}</div>
         )}
 
         {type === "interest" && <div className="w-[20%]">{name}</div>}

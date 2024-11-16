@@ -69,9 +69,7 @@ const ScheduleModal: React.FC = () => {
         {/* 해당 날짜의 스케줄 리스트 */}
         <article className="flex flex-col items-center justify-start h-[70%] overflow-auto">
           {scheduleData &&
-            scheduleData.list.map((elem) => {
-              return <ScheduleItem key={elem.idx} data={elem} />;
-            })}
+            scheduleData.list.map((elem) => <ScheduleItem key={elem.idx} data={elem} />)}
         </article>
       </div>
     </section>
