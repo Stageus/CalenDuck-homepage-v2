@@ -60,7 +60,7 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
             scheduleListData.map((elem) => {
               return (
                 <ScheduleNumTagItem
-                  key={1}
+                  key={elem.idx}
                   data={{
                     idx: elem.idx,
                     count: elem.count,

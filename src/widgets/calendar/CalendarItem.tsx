@@ -156,7 +156,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   // }, [initialDate, status, managingInterest]);
 
   if (!personalScheduleData) {
-    return <div>...Loading</div>;
+    return <></>;
   }
 
   return (
