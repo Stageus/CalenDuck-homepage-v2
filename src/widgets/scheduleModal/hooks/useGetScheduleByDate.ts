@@ -26,7 +26,7 @@ export const useGetScheduleByDate = (date: string) => {
   const getLoginToken = useGetLoginToken();
 
   const query = useQuery<unknown, AxiosError, ScheduleDetailResponseDto>({
-    queryKey: ["SCHEDULES-ALL"],
+    queryKey: ["SCHEDULES-ALL", date],
     async queryFn(): Promise<ScheduleDetailResponseDto> {
       const { data } = await axiosInstance.get<ScheduleDetailResponseDto>(
         `/schedules/details?fullDate=${date}`,

@@ -36,8 +36,8 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
   const [, setSelectedDate] = useRecoilState(selectedDateAtom);
 
   const openScheduleModalEvent = () => {
-    setOpenModal(!openModal);
     setSelectedDate(day);
+    setOpenModal(!openModal);
   };
 
   const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(" ");
