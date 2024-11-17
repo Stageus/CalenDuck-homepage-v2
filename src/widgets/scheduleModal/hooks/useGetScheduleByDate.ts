@@ -6,15 +6,21 @@ import { useRemoveLoginCookie } from "../../../shared/hooks/useRemoveCookie";
 import { useNavigate } from "react-router-dom";
 import { useGetLoginToken } from "../../../shared/hooks/useGetLoginToken";
 
+/**
+ * 해당 API에서 사용하는 스케쥴 모델.
+ * 백엔드에서 모델 정의가 안되어있어서 각 API 별로 해당 타입을 정의할 수 밖에 없음.
+ */
+export type ScheduleDetailModel = {
+  idx: number;
+  name: string;
+  time: string;
+  type: string;
+  contents: string;
+  priority: boolean;
+};
+
 type ScheduleDetailResponseDto = {
-  list: {
-    idx: number;
-    name: string;
-    time: string;
-    type: string;
-    contents: string;
-    priority: boolean;
-  }[];
+  list: ScheduleDetailModel[];
 };
 
 /**

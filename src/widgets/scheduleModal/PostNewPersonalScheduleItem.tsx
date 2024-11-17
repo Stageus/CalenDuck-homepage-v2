@@ -43,15 +43,15 @@ const PostNewPersonalScheduleItem = ({
       {/* 개인 스케줄 입력란 */}
       <article className="w-[655px] h-[15%] p-[20px] flex justify-between border-y border-black">
         <div className="w-[85%] flex items-center">
-          {alarm ? (
+          {/* {alarm ? (
             <div onClick={clickSetAlarmEvent}>
-              <ScheduleAlarmOnBtn />
+              <ScheduleAlarmOnBtn idx={}/>
             </div>
           ) : (
             <div onClick={clickSetAlarmEvent}>
               <ScheduleAlarmOffBtn />
             </div>
-          )}
+          )} */}
           <div>
             <input
               type="time"

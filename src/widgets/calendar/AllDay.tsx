@@ -12,7 +12,7 @@ interface Props {
   day: Date;
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
-  scheduleListData?: TScheduleLabelItem[];
+  scheduleListData: TScheduleLabelItem[];
 }
 
 interface ArticleProps {

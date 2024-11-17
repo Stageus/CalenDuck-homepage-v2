@@ -4,13 +4,13 @@ import ScheduleAlarmOnBtn from "widgets/scheduleModal/ScheduleAlarmOnBtn";
 import ScheduleAlarmOffBtn from "widgets/scheduleModal/ScheduleAlarmOffBtn";
 import edit from "shared/imgs/edit.svg";
 import finish from "shared/imgs/finish.svg";
-import { TScheduleItem } from "types";
 import { useCookies } from "react-cookie";
 import DeletePersonalScheduleItem from "./DeletePersonalScheduleItem";
 import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
+import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
 
-const ScheduleItem: React.FC<{ data: TScheduleItem }> = (props) => {
+const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
   const { idx, name, time, type, contents, priority } = props.data;
   const [cookies] = useCookies(["token"]);
 
