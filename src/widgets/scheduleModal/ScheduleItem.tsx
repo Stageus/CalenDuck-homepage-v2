@@ -48,25 +48,30 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
   const [scheduleTime, setScheduleTime] = useState("");
   const [selectedDate] = useRecoilState(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
-  const month = selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
-  const date = selectedDate && selectedDate.getDate().toString().padStart(2, "0");
+  const month =
+    selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+  const date =
+    selectedDate && selectedDate.getDate().toString().padStart(2, "0");
   const selectedTime = scheduleTime.split(":").join("");
   const fullDate = Number(`${year}${month}${date}${selectedTime}`);
 
   // 스케줄 수정 PUT api 연결 (/schedules/:idx)
   const postEditedScheduleEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules/${idx}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-        body: JSON.stringify({
-          fullDate: fullDate,
-          personalContents: scheduleContents,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_KEY}/schedules/${idx}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          body: JSON.stringify({
+            fullDate: fullDate,
+            personalContents: scheduleContents,
+          }),
+        }
+      );
 
       if (response.ok) {
         alert(`스케줄 수정을 완료했습니다.`);
@@ -100,7 +105,10 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
         )}
 
         {editing ? (
-          <input type="time" onChange={(e) => setScheduleTime(e.target.value)} />
+          <input
+            type="time"
+            onChange={(e) => setScheduleTime(e.target.value)}
+          />
         ) : (
           <div className="w-[15%]">{getTimeString(time)}</div>
         )}
@@ -123,7 +131,11 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
 
       {/* 개인 스케줄일 때에만 수정 및 삭제 가능 */}
       {type === "personal" && (
-        <div className={`w-[13%] flex ${editing ? "justify-center" : "justify-between"}`}>
+        <div
+          className={`w-[13%] flex ${
+            editing ? "justify-center" : "justify-between"
+          }`}
+        >
           {editing ? (
             <>
               <button onClick={postEditedScheduleEvent}>
