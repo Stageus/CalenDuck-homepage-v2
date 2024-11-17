@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import HeaderSidebarContainer from "shared/components/HeaderSidebarContainer";
 import CalendarItem from "widgets/calendar/CalendarItem";
@@ -32,7 +32,10 @@ const MainPage = () => {
     <>
       <HeaderSidebarContainer />
       <article className="flex flex-col flex-grow">
-        <CalendarItem onDateClick={handleDateClick} key={calendarComponentKey} />
+        <CalendarItem
+          onDateClick={handleDateClick}
+          key={calendarComponentKey}
+        />
       </article>
 
       {/* 스케줄 모달 */}
@@ -42,7 +45,9 @@ const MainPage = () => {
             className="fixed inset-0 bg-lightgrayColor opacity-50"
             onClick={openScheduleModalEvent}
           ></div>
-          <ScheduleModal updateCalendarComponentKey={updateCalendarComponentKey} />
+          <ScheduleModal
+            updateCalendarComponentKey={updateCalendarComponentKey}
+          />
         </div>
       )}
     </>

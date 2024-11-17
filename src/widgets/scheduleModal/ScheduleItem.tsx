@@ -10,8 +10,18 @@ import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
 
-const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
-  const { idx, name, time, type, contents, priority } = props.data;
+type Props = {
+  data: ScheduleDetailModel;
+  updateCalendarComponentKey: () => void;
+  refetchScheduleByDate: () => void;
+};
+
+const ScheduleItem: React.FC<Props> = ({
+  data: schedule,
+  updateCalendarComponentKey,
+  refetchScheduleByDate,
+}) => {
+  const { idx, name, time, type, contents, priority } = schedule;
   const [cookies] = useCookies(["token"]);
 
   // 스케줄 알람 여부 버튼 토글
@@ -144,7 +154,11 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
               <button onClick={editTitleEvent}>
                 <img src={edit} alt="수정하기" />
               </button>
-              <DeletePersonalScheduleItem schedule={props.data} />
+              <DeletePersonalScheduleItem
+                schedule={schedule}
+                refetchScheduleByDate={refetchScheduleByDate}
+                updateCalendarComponentKey={updateCalendarComponentKey}
+              />
             </>
           )}
         </div>

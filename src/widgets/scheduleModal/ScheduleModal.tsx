@@ -12,32 +12,42 @@ type Props = {
   updateCalendarComponentKey: () => void;
 };
 
-const ScheduleModal: React.FC<Props> = ({ updateCalendarComponentKey }: Props) => {
+const ScheduleModal: React.FC<Props> = ({
+  updateCalendarComponentKey,
+}: Props) => {
   const selectedDate = useRecoilValue(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
-  const month = selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
-  const date = selectedDate && selectedDate.getDate().toString().padStart(2, "0");
+  const month =
+    selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+  const date =
+    selectedDate && selectedDate.getDate().toString().padStart(2, "0");
   const fullDate = `${year}${month}${date}`;
 
   const [cookies] = useCookies(["token"]);
   const [interestOptions, setInterestOptions] = useState<string[]>([]);
 
-  const { data: scheduleData, refetch: refetchScheduleByDate } = useGetScheduleByDate(fullDate);
+  const { data: scheduleData, refetch: refetchScheduleByDate } =
+    useGetScheduleByDate(fullDate);
 
   // 관심사 카테고리 선택 GET api 연결 (/interests)
   useEffect(() => {
     const getInterestOptions = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/interests`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_KEY}/interests`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
         const result = await response.json();
         if (response.status === 200) {
-          const interests = result.list.map((item: { interestName: string }) => item.interestName);
+          const interests = result.list.map(
+            (item: { interestName: string }) => item.interestName
+          );
           setInterestOptions(["전체보기", ...interests]);
         } else if (response.status === 204) {
           setInterestOptions(["전체보기"]);
@@ -75,7 +85,14 @@ const ScheduleModal: React.FC<Props> = ({ updateCalendarComponentKey }: Props) =
         {/* 해당 날짜의 스케줄 리스트 */}
         <article className="flex flex-col items-center justify-start h-[70%] overflow-auto">
           {scheduleData &&
-            scheduleData.list.map((elem) => <ScheduleItem key={elem.idx} data={elem} />)}
+            scheduleData.list.map((elem) => (
+              <ScheduleItem
+                key={elem.idx}
+                data={elem}
+                refetchScheduleByDate={refetchScheduleByDate}
+                updateCalendarComponentKey={updateCalendarComponentKey}
+              />
+            ))}
         </article>
       </div>
     </section>

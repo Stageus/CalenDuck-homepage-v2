@@ -1,4 +1,9 @@
-import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRemoveLoginCookie } from "../../../shared/hooks/useRemoveCookie";
 import axiosInstance from "../../../shared/utils/axios";
@@ -34,6 +39,7 @@ export const useGetScheduleAll = (monthYear: string) => {
 
       return data;
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
