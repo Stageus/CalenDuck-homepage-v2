@@ -42,9 +42,9 @@ export const useGetScheduleByDate = (date: string) => {
           },
         }
       );
-
       return data;
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
