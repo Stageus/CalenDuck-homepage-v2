@@ -9,6 +9,7 @@ import DeletePersonalScheduleItem from "./DeletePersonalScheduleItem";
 import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
+import { useUpdateScheduleByIdx } from "./hooks/useUpdateScheduleByIdx";
 
 type Props = {
   data: ScheduleDetailModel;
@@ -59,40 +60,13 @@ const ScheduleItem: React.FC<Props> = ({
     selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
   const date =
     selectedDate && selectedDate.getDate().toString().padStart(2, "0");
-  const selectedTime = scheduleTime.split(":").join("");
-  const fullDate = Number(`${year}${month}${date}${selectedTime}`);
 
-  // 스케줄 수정 PUT api 연결 (/schedules/:idx)
-  const postEditedScheduleEvent = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_KEY}/schedules/${idx}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          body: JSON.stringify({
-            fullDate: fullDate,
-            personalContents: scheduleContents,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        alert(`스케줄 수정을 완료했습니다.`);
-      } else if (response.status === 400) {
-        alert(`글자수 제한에 유의해주세요.`);
-      } else if (response.status === 401) {
-        alert(`스케줄 수정에 실패했습니다.`);
-      } else if (response.status === 404) {
-        alert(`스케줄 수정에 실패했습니다.`);
-      }
-    } catch (error) {
-      alert(`스케줄 수정 중 오류가 발생했습니다.`);
-    }
-  };
+  const { mutate: updateScheduleByIdx } = useUpdateScheduleByIdx({
+    onSuccess() {
+      setEditing(false);
+      refetchScheduleByDate();
+    },
+  });
 
   return (
     <article
@@ -145,7 +119,15 @@ const ScheduleItem: React.FC<Props> = ({
         >
           {editing ? (
             <>
-              <button onClick={postEditedScheduleEvent}>
+              <button
+                onClick={() =>
+                  updateScheduleByIdx({
+                    idx,
+                    personalContents: scheduleContents,
+                    fullDate: `${year}${month}${date} ${scheduleTime}`,
+                  })
+                }
+              >
                 <img src={finish} alt="제출하기" />
               </button>
             </>

@@ -25,8 +25,10 @@ const PostNewPersonalScheduleItem = ({
   const [personalContents, setPersonalContents] = useState("");
   const [selectedDate] = useRecoilState(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
-  const month = selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
-  const date = selectedDate && selectedDate.getDate().toString().padStart(2, "0");
+  const month =
+    selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+  const date =
+    selectedDate && selectedDate.getDate().toString().padStart(2, "0");
 
   const { mutate: createPersonalSchedule } = useCreatePersonalSchedule({
     onSuccess() {
