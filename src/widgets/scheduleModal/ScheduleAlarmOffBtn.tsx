@@ -3,11 +3,14 @@ import { useCookies } from "react-cookie";
 import alarmOffIcon from "shared/imgs/alarmOff.svg";
 import { useAlarmOff } from "./hooks/useAlarmOff";
 
-const ScheduleAlarmOffBtn: React.FC<{ idx: number }> = ({ idx }) => {
-  const [cookies] = useCookies(["token"]);
-
+const ScheduleAlarmOffBtn: React.FC<{
+  idx: number;
+  setAlarm: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ idx, setAlarm }) => {
   const { mutate: alarmOff } = useAlarmOff({
-    onSuccess() {},
+    onSuccess() {
+      setAlarm((value) => !value);
+    },
   });
 
   return (

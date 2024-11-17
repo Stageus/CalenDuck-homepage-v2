@@ -16,9 +16,6 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
 
   // 스케줄 알람 여부 버튼 토글
   const [alarm, setAlarm] = useState<boolean>(priority);
-  const clickSetAlarmEvent = () => {
-    setAlarm(!alarm);
-  };
 
   const getTimeString = (time: string) => {
     const date = new Date(time);
@@ -94,13 +91,13 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
       } w-[638px] h-[70px] rounded-[5px] flex justify-between items-center p-[20px] m-[5px]`}
     >
       <div className="w-[80%] flex items-center">
-        {alarm ? (
-          <div onClick={clickSetAlarmEvent}>
-            <ScheduleAlarmOnBtn idx={idx} />
+        {!alarm ? (
+          <div>
+            <ScheduleAlarmOnBtn setAlarm={setAlarm} idx={idx} />
           </div>
         ) : (
-          <div onClick={clickSetAlarmEvent}>
-            <ScheduleAlarmOffBtn idx={idx} />
+          <div>
+            <ScheduleAlarmOffBtn setAlarm={setAlarm} idx={idx} />
           </div>
         )}
 
@@ -147,7 +144,7 @@ const ScheduleItem: React.FC<{ data: ScheduleDetailModel }> = (props) => {
               <button onClick={editTitleEvent}>
                 <img src={edit} alt="수정하기" />
               </button>
-              <DeletePersonalScheduleItem {...props.data} />
+              <DeletePersonalScheduleItem schedule={props.data} />
             </>
           )}
         </div>
