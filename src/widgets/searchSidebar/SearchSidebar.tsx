@@ -89,7 +89,9 @@ const SearchSidebar: React.FC = () => {
   // 검색기간, 검색어 중 하나라도 미입력 후 검색 진행 시 경고문구 출력
   const [alert, setAlert] = useState<boolean>(false);
   const [cookies] = useCookies(["token"]);
-  const [seachScheduleList, setSearchScheduleList] = useState<TScheduleItem[]>([]);
+  const [seachScheduleList, setSearchScheduleList] = useState<TScheduleItem[]>(
+    []
+  );
 
   const clickSearchEvent = async () => {
     const startDateValue = startDateRef.current?.value.split("-").join("");
@@ -128,7 +130,9 @@ const SearchSidebar: React.FC = () => {
   };
 
   // 검색 사이드바 토글
-  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(searchSidebarToggleAtom);
+  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(
+    searchSidebarToggleAtom
+  );
   if (!searchSidebarToggle) {
     return null;
   }
