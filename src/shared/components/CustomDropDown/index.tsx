@@ -30,6 +30,7 @@ const CustomDropDown: React.FC<DropDownItemProps> = ({
     >
       {options.map((option, index) => (
         <option key={`option-${index}`} value={option.value}>
+          {option.value}
           {option.display}
         </option>
       ))}

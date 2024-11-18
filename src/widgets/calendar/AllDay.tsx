@@ -40,7 +40,9 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
     setOpenModal(!openModal);
   };
 
-  const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(" ");
+  const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(
+    " "
+  );
   const numClassNames = [
     articleProps.sameMonth ? "font-semibold" : "font-thin",
     articleProps.sameDay ? "text-alertColor" : "text-black",
@@ -51,7 +53,12 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
       onClick={articleProps.sameMonth ? openScheduleModalEvent : undefined}
       className={`relative border justify-center items-center h-[180px] flex-wrap content-between ${dayClassNames}`}
     >
-      <p className={classNames(numClassNames, "absolute top-0 right-[10px] text-[24px]")}>
+      <p
+        className={classNames(
+          numClassNames,
+          "absolute top-0 right-[10px] text-[24px]"
+        )}
+      >
         {day.getDate()}
       </p>
       {articleProps.sameMonth && (

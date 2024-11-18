@@ -15,7 +15,6 @@ interface CalendarItemProps {
 const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const searchParam = new URLSearchParams();
 
   const urlSearch = new URLSearchParams(location.search);
 
@@ -67,9 +66,21 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
                   display: interest.interestName,
                 })),
               ]}
-              onChange={(value) => {
-                console.log(value);
+              onChange={(selectedOption) => {
+                if (selectedOption.value === -1) {
+                  urlSearch.delete("interestIdx");
+                } else {
+                  urlSearch.set("interestIdx", selectedOption.value);
+                }
+                navigate(`/main?${urlSearch.toString()}`, { replace: true });
               }}
+              selectedIdx={
+                myInterest.list.findIndex(
+                  (interest) =>
+                    interest.interestIdx ===
+                    Number(urlSearch.get("interestIdx"))
+                ) + 1 // 제일 앞에 전체보기가 추가되기 때문
+              }
             />
           )
         )}
@@ -77,12 +88,12 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
         <CustomDropDown
           options={YEAR.map((year) => ({ value: year, display: year }))}
           onChange={(selectedOption) => {
-            searchParam.set(
+            urlSearch.set(
               "date",
               `${selectedOption.value}${getSelectedYearMonth().month}`
             );
 
-            navigate(`/main?${searchParam.toString()}`, { replace: true });
+            navigate(`/main?${urlSearch.toString()}`, { replace: true });
           }}
           selectedIdx={YEAR.findIndex(
             (year) => year === getSelectedYearMonth().year
@@ -91,28 +102,17 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
         <CustomDropDown
           options={MONTH.map((month) => ({ value: month, display: month }))}
           onChange={(selectedOption) => {
-            searchParam.set(
+            urlSearch.set(
               "date",
               `${getSelectedYearMonth().year}${selectedOption.value}`
             );
 
-            navigate(`/main?${searchParam.toString()}`, { replace: true });
+            navigate(`/main?${urlSearch.toString()}`, { replace: true });
           }}
           selectedIdx={MONTH.findIndex(
             (month) => month === getSelectedYearMonth().month
           )}
         />
-
-        {/* <DropDownItem
-          options={YEAR}
-          value={selectedYear}
-          onChange={handleYearChange}
-        />
-        <DropDownItem
-          options={MONTH}
-          value={selectedMonth}
-          onChange={handleMonthChange}
-        /> */}
       </article>
 
       {/* 달력 부분 */}

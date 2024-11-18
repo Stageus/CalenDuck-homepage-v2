@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 import { useRemoveLoginCookie } from "../../../shared/hooks/useRemoveCookie";
 import axiosInstance from "../../../shared/utils/axios";
 import { useGetLoginToken } from "../../../shared/hooks/useGetLoginToken";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 type GetScheduleResponseDto = {
@@ -24,12 +24,16 @@ export const useGetScheduleAll = (monthYear: string) => {
   const navigate = useNavigate();
   const removeLoginToken = useRemoveLoginCookie();
   const getLoginToken = useGetLoginToken();
+  const location = useLocation();
+  const searchParam = new URLSearchParams(location.search);
+  const interestIdx = searchParam.get("interestIdx");
 
   const query = useQuery<GetScheduleResponseDto, AxiosError>({
-    queryKey: ["GET-SCHEDULES-ALL", monthYear],
+    queryKey: ["GET-SCHEDULES-ALL", monthYear, interestIdx],
     async queryFn(): Promise<GetScheduleResponseDto> {
       const { data } = await axiosInstance.get<GetScheduleResponseDto>(
-        `/schedules?yearMonth=${monthYear}`,
+        `/schedules?yearMonth=${monthYear}` +
+          (interestIdx ? `&interestIdx=${interestIdx}` : ""),
         {
           headers: {
             Authorization: `Bearer ${getLoginToken()}`,
