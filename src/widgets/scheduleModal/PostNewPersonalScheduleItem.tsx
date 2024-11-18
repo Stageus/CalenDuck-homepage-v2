@@ -32,7 +32,6 @@ const PostNewPersonalScheduleItem = ({
 
   const { mutate: createPersonalSchedule } = useCreatePersonalSchedule({
     onSuccess() {
-      alert("스케줄이 생성되었습니다.");
       setScheduleTime("");
       setPersonalContents("");
       refetchScheduleByDate();

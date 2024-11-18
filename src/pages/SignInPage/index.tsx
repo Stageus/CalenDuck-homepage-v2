@@ -31,7 +31,6 @@ const SignInPage = () => {
   const { mutate: login } = useLogin({
     onSuccess(data) {
       setCookies("token", data.token);
-      alert("로그인에 성공하셨습니다.");
 
       redirectToMainPage();
     },
