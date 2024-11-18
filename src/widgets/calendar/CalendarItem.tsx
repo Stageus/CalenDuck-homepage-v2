@@ -153,7 +153,6 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
 
       {/* 달력 부분 */}
       <article className="w-full h-[90%]">
-        <ControlDate nowDate={nowDate} setNowDate={setNowDate} />
         <DateBox
           nowDate={nowDate}
           setNowDate={setNowDate}
