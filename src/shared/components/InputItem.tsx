@@ -93,7 +93,7 @@ const InputItem: React.FC<InputItemProps> = ({
           </button>
         )}
       </div>
-      <div className="text-[13px] mt-[8px] absolute">
+      <div className="text-[13px] mt-[8px]">
         <span
           className={classNames(
             helperTextType === "grey"

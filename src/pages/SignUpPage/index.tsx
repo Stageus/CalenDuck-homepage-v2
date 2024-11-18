@@ -153,7 +153,7 @@ const SignUpPage = () => {
           </h2>
           <div className="w-full">
             <InputItem
-              className="mb-[52px]"
+              className="mb-[24px]"
               label="아이디"
               type="text"
               placeholder="6~12글자로 입력해주세요"
@@ -175,7 +175,7 @@ const SignUpPage = () => {
               }}
             />
             <InputItem
-              className="mb-[52px]"
+              className="mb-[24px]"
               label="비밀번호"
               helperText={pwHelperText.text}
               helperTextType={pwHelperText.type}
@@ -198,7 +198,7 @@ const SignUpPage = () => {
               onChange={(e) => setPw(e.target.value)}
             />
             <InputItem
-              className="mb-[52px]"
+              className="mb-[24px]"
               label="이름"
               helperText={nameHelperText.text}
               helperTextType={nameHelperText.type}
@@ -220,7 +220,7 @@ const SignUpPage = () => {
               onChange={(e) => setName(e.target.value)}
             />
             <InputItem
-              className="mb-[52px]"
+              className="mb-[24px]"
               label="이메일"
               type="email"
               extraBtn="번호 전송"
@@ -258,7 +258,7 @@ const SignUpPage = () => {
             />
             <InputItem
               label="인증번호"
-              className="mb-[52px]"
+              className="mb-[24px]"
               type="text"
               extraBtn="인증 확인"
               value=""
@@ -329,7 +329,7 @@ const SignUpPage = () => {
 
           <div className="w-full flex flex-col justify-between items-center">
             <button
-              className="w-full py-[10px] mb-[10px] bg-[#FF7E29] rounded-[8px] font-semibold text-[16px] text-white"
+              className="w-full py-[10px] bg-[#FF7E29] rounded-[8px] font-semibold text-[16px] text-white"
               onClick={() => {
                 if (checkedList.length !== requiredCheckboxes.length) {
                   return alert("약관 동의는 필수입니다.");
@@ -372,6 +372,15 @@ const SignUpPage = () => {
             >
               회원가입
             </button>
+
+            <div className="text-[15px] w-full mt-[32px] mb-[20px]">
+              <span className="mr-[12px] text-[#FFB271]">
+                이미 계정이 있으신가요?
+              </span>
+              <button className="border-none bg-none font-bold   text-[#FF7E29]">
+                로그인하기
+              </button>
+            </div>
           </div>
         </div>
       </article>
