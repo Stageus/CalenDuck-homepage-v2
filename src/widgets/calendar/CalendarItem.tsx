@@ -56,6 +56,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
           // general 계정으로 로그인
           myInterest && (
             <CustomDropDown
+              className="mr-[12px]"
               options={[
                 {
                   value: -1,
@@ -86,6 +87,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
         )}
 
         <CustomDropDown
+          className="mr-[12px]"
           options={YEAR.map((year) => ({ value: year, display: year }))}
           onChange={(selectedOption) => {
             urlSearch.set(
