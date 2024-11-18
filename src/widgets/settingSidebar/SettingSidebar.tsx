@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import settingSidebarToggleAtom from "shared/recoil/settingSidebarToggleAtom";
 
-import search from "shared/imgs/search.svg";
 import MyInterestList from "widgets/settingSidebar/MyInterestList";
 import LogoutItem from "widgets/settingSidebar/LogoutItem";
 import DeleteAccountItem from "widgets/settingSidebar/DeleteAccountItem";
