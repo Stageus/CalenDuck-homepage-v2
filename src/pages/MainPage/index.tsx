@@ -31,12 +31,16 @@ const MainPage = () => {
   return (
     <>
       <HeaderSidebarContainer />
-      <article className="flex flex-col flex-grow">
-        <CalendarItem
-          onDateClick={handleDateClick}
-          key={calendarComponentKey}
-        />
-      </article>
+      <div className="bg-[#FFF6ED] h-[100vh] mt-[56px]">
+        <div className="max-w-[900px] w-full mx-auto">
+          <article className="flex flex-col flex-grow">
+            <CalendarItem
+              onDateClick={handleDateClick}
+              key={calendarComponentKey}
+            />
+          </article>
+        </div>
+      </div>
 
       {/* 스케줄 모달 */}
       {openModal && (

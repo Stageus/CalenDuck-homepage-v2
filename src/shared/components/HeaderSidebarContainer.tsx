@@ -9,10 +9,13 @@ import SearchSidebar from "widgets/searchSidebar/SearchSidebar";
 import SettingSidebar from "widgets/settingSidebar/SettingSidebar";
 
 const HeaderSidebarContainer = () => {
-  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(searchSidebarToggleAtom);
-  const [settingSidebarToggle, setSettingSidebarToggle] = useRecoilState(settingSidebarToggleAtom);
+  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(
+    searchSidebarToggleAtom
+  );
+  const [settingSidebarToggle, setSettingSidebarToggle] = useRecoilState(
+    settingSidebarToggleAtom
+  );
 
-  // 사이드바 외부 회색 배경 클릭 시 닫힘
   const closeSidebar = () => {
     setSearchSidebarToggle(false);
     setSettingSidebarToggle(false);

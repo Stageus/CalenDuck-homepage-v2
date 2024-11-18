@@ -1,23 +1,22 @@
-import React from "react";
-
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import searchSidebarToggleAtom from "shared/recoil/searchSidebarToggleAtom";
 import settingSidebarToggleAtom from "shared/recoil/settingSidebarToggleAtom";
-
 import logo from "shared/imgs/logo.svg";
 import alarm from "shared/imgs/alarm.svg";
 import search from "shared/imgs/search.svg";
-import hamberger from "shared/imgs/hamburger.svg";
-
+import hamburger from "shared/imgs/hamburger.svg";
 import HeaderAlarmNumTagItem from "shared/components/HeaderAlarmNumTagItem";
-
 import { Link } from "react-router-dom";
 
 const HeaderItem = () => {
   const { pathname } = useLocation();
-  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(searchSidebarToggleAtom);
-  const [settingSidebarToggle, setSettingSidebarToggle] = useRecoilState(settingSidebarToggleAtom);
+  const [searchSidebarToggle, setSearchSidebarToggle] = useRecoilState(
+    searchSidebarToggleAtom
+  );
+  const [settingSidebarToggle, setSettingSidebarToggle] = useRecoilState(
+    settingSidebarToggleAtom
+  );
 
   const date = `${new Date().getFullYear()}${(new Date().getMonth() + 1)
     .toString()
@@ -35,30 +34,27 @@ const HeaderItem = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full bg-white y-[70px] flex justify-center items-center z-50">
-      <div className="max-w-[1200px] flex justify-between w-full px-[20px]">
+    <header className="fixed h-[56px] top-0 left-0 right-0 w-full bg-white y-[70px] flex items-center z-50">
+      <div className="w-full flex justify-between px-[40px]">
         <Link to={`/main?date=${date}`}>
           <img src={logo} alt="메인" />
         </Link>
 
-        {(pathname === "/main" || pathname === "/alarm" || pathname === "/contact") && (
-          <div className="flex justify-between items-center w-[200px]">
+        {(pathname === "/main" ||
+          pathname === "/alarm" ||
+          pathname === "/contact") && (
+          <div className="flex justify-between items-center gap-[12px]">
             {/* AlarmPage로 이동 */}
             <Link to="/alarm">
-              <button className="h-[30px] relative">
-                <img src={alarm} className="w-full h-full" alt="알림" />
-                {/* <div className="absolute top-[-7px] right-[-13px]"> */}
-                <HeaderAlarmNumTagItem />
-                {/* </div> */}
-              </button>
+              <img src={alarm} className="w-full h-full" alt="알림" />
             </Link>
             {/* SearchSidebar 토글 */}
-            <button className="h-[30px]" onClick={searchBtnToggleEvent}>
+            <button onClick={searchBtnToggleEvent}>
               <img src={search} className="w-full h-full" alt="검색" />
             </button>
             {/* SettingSidebar 토글 */}
-            <button className="h-[30px]" onClick={settingBtnToggleEvent}>
-              <img src={hamberger} className="w-full h-full" alt="설정" />
+            <button onClick={settingBtnToggleEvent}>
+              <img src={hamburger} className="w-full h-full" alt="설정" />
             </button>
           </div>
         )}

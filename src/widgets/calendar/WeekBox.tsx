@@ -6,8 +6,8 @@ interface Props {
 
 const WeekBox = ({ weekName }: Props) => {
   return (
-    <article className="w-full flex justify-center items-center">
-      <p>{weekName}</p>
+    <article className="w-full flex justify-center items-center h-[24px]">
+      <p className="text-[12px] text-[#252525]">{weekName}</p>
     </article>
   );
 };
