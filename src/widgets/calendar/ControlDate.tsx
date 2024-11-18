@@ -6,6 +6,8 @@ interface Props {
 }
 
 /**
+ * UI가 잘못되어있어서 deprecated되었음
+ *
  * @deprecated
  */
 const ControlDate = ({ nowDate, setNowDate }: Props) => {

@@ -5,11 +5,16 @@ interface DropDownItemProps<T = any> {
     value: T;
     display: string;
   }[];
-  onChange: (value: T) => void;
+  selectedIdx?: number;
+  onChange: (selectedOption: { value: T; display: string }) => void;
 }
 
-const CustomDropDown: React.FC<DropDownItemProps> = ({ options, onChange }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const CustomDropDown: React.FC<DropDownItemProps> = ({
+  selectedIdx,
+  options,
+  onChange,
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(selectedIdx || 0);
 
   return (
     <select
