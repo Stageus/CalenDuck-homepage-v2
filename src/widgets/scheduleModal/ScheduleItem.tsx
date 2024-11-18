@@ -4,7 +4,6 @@ import ScheduleAlarmOnBtn from "widgets/scheduleModal/ScheduleAlarmOnBtn";
 import ScheduleAlarmOffBtn from "widgets/scheduleModal/ScheduleAlarmOffBtn";
 import edit from "shared/imgs/edit.svg";
 import finish from "shared/imgs/finish.svg";
-import { useCookies } from "react-cookie";
 import DeletePersonalScheduleItem from "./DeletePersonalScheduleItem";
 import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
@@ -23,7 +22,6 @@ const ScheduleItem: React.FC<Props> = ({
   refetchScheduleByDate,
 }) => {
   const { idx, name, time, type, contents, priority } = schedule;
-  const [cookies] = useCookies(["token"]);
 
   // 스케줄 알람 여부 버튼 토글
   const [alarm, setAlarm] = useState<boolean>(priority);
@@ -52,7 +50,7 @@ const ScheduleItem: React.FC<Props> = ({
     }
   };
   // Edit을 위한 값
-  const [scheduleContents, setScheduleContents] = useState("");
+  const [scheduleContents, setScheduleContents] = useState(contents);
   const [scheduleTime, setScheduleTime] = useState("");
   const [selectedDate] = useRecoilState(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
@@ -120,13 +118,17 @@ const ScheduleItem: React.FC<Props> = ({
           {editing ? (
             <>
               <button
-                onClick={() =>
+                onClick={() => {
+                  if (!scheduleTime) {
+                    return alert("시간을 선택해주세요.");
+                  }
+
                   updateScheduleByIdx({
                     idx,
                     personalContents: scheduleContents,
                     fullDate: `${year}${month}${date} ${scheduleTime}`,
-                  })
-                }
+                  });
+                }}
               >
                 <img src={finish} alt="제출하기" />
               </button>
