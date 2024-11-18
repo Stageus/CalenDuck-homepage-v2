@@ -62,6 +62,7 @@ const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
 
         return (
           <AllDay
+            i={i}
             key={date.toISOString()}
             day={date}
             nowDate={nowDate}

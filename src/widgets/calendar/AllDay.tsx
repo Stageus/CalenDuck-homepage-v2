@@ -7,12 +7,18 @@ import { TScheduleLabelItem } from "types";
 
 import ScheduleNumTagItem from "widgets/calendar/ScheduleNumTagItem";
 import { classNames } from "../../shared/utils/classNames";
+import { SCHEDULE_COLOR } from "../../shared/consts/color";
 
 interface Props {
   day: Date;
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
   scheduleListData: TScheduleLabelItem[];
+
+  /**
+   * 스케줄 라벨 색상 결정 요소입니다.
+   */
+  i: number;
 }
 
 interface ArticleProps {
@@ -20,7 +26,7 @@ interface ArticleProps {
   sameDay: boolean;
 }
 
-const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
+const AllDay = ({ day, nowDate, setNowDate, scheduleListData, i }: Props) => {
   const nowTime = new Date();
 
   const articleProps: ArticleProps = {
@@ -44,6 +50,8 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
     " "
   );
 
+  const startColorIndex = i % SCHEDULE_COLOR.length;
+
   return (
     <button
       onClick={articleProps.sameMonth ? openScheduleModalEvent : undefined}
@@ -64,9 +72,14 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
       {articleProps.sameMonth && (
         <div className="w-full flex flex-wrap justify-center px-[2px]">
           {scheduleListData &&
-            scheduleListData.map((elem) => {
+            scheduleListData.map((elem, i) => {
               return (
                 <ScheduleNumTagItem
+                  color={
+                    SCHEDULE_COLOR[
+                      (startColorIndex + i) % SCHEDULE_COLOR.length
+                    ].code
+                  }
                   key={elem.idx}
                   data={{
                     idx: elem.idx,
