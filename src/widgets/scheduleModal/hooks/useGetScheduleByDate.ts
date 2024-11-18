@@ -25,17 +25,23 @@ type ScheduleDetailResponseDto = {
 
 /**
  * @param date 날짜 ex. YYYYMMDD
+ * @param selectedInterest 관심사 필터링, 없을 경우 -1
  */
-export const useGetScheduleByDate = (date: string) => {
+export const useGetScheduleByDate = (
+  date: string,
+  selectedInterest: number
+) => {
   const removeLoginToken = useRemoveLoginCookie();
   const navigate = useNavigate();
   const getLoginToken = useGetLoginToken();
 
   const query = useQuery<unknown, AxiosError, ScheduleDetailResponseDto>({
-    queryKey: ["SCHEDULES-ALL", date],
+    queryKey: ["SCHEDULES-ALL", date, selectedInterest],
     async queryFn(): Promise<ScheduleDetailResponseDto> {
+      console.log(selectedInterest);
       const { data } = await axiosInstance.get<ScheduleDetailResponseDto>(
-        `/schedules/details?fullDate=${date}`,
+        `/schedules/details?fullDate=${date}` +
+          (selectedInterest !== -1 ? `&interestIdx=${selectedInterest}` : ``),
         {
           headers: {
             Authorization: `Bearer ${getLoginToken()}`,

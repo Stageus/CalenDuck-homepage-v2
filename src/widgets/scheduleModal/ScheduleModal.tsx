@@ -7,6 +7,9 @@ import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { useCookies } from "react-cookie";
 import PostNewPersonalScheduleItem from "./PostNewPersonalScheduleItem";
 import { useGetScheduleByDate } from "./hooks/useGetScheduleByDate";
+import { useGetSelectedYearMonth } from "../../shared/hooks/useGetSelectedYearMonth";
+import { useGetMyInterest } from "../calendar/hooks/useGetMyInterest";
+import CustomDropDown from "../../shared/components/CustomDropDown";
 
 type Props = {
   updateCalendarComponentKey: () => void;
@@ -16,51 +19,23 @@ const ScheduleModal: React.FC<Props> = ({
   updateCalendarComponentKey,
 }: Props) => {
   const selectedDate = useRecoilValue(selectedDateAtom);
-  const year = selectedDate && selectedDate.getFullYear();
-  const month =
-    selectedDate && (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+
+  const getSelectedYearMonth = useGetSelectedYearMonth();
+
+  const year = getSelectedYearMonth().year;
+  const month = getSelectedYearMonth().month;
   const date =
     selectedDate && selectedDate.getDate().toString().padStart(2, "0");
-  const fullDate = `${year}${month}${date}`;
 
   const [cookies] = useCookies(["token"]);
   const [interestOptions, setInterestOptions] = useState<string[]>([]);
 
+  const [selectedInterest, setSelectedInterest] = useState(-1);
+
   const { data: scheduleData, refetch: refetchScheduleByDate } =
-    useGetScheduleByDate(fullDate);
+    useGetScheduleByDate(`${year}${month}${date}`, selectedInterest);
 
-  // 관심사 카테고리 선택 GET api 연결 (/interests)
-  useEffect(() => {
-    const getInterestOptions = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_KEY}/interests`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${cookies.token}`,
-            },
-          }
-        );
-        const result = await response.json();
-        if (response.status === 200) {
-          const interests = result.list.map(
-            (item: { interestName: string }) => item.interestName
-          );
-          setInterestOptions(["전체보기", ...interests]);
-        } else if (response.status === 204) {
-          setInterestOptions(["전체보기"]);
-        } else if (response.status === 401) {
-          console.log("토큰 검증 실패");
-        }
-      } catch (error) {
-        console.error("서버 에러: ", error);
-      }
-    };
-
-    getInterestOptions();
-  }, [cookies.token]);
+  const { data: myInterest } = useGetMyInterest();
 
   return (
     <section className="bg-keyColor w-[717px] h-[486px] p-[20px] flex justify-center items-center drop-shadow">
@@ -68,11 +43,24 @@ const ScheduleModal: React.FC<Props> = ({
         {/* 상단 */}
         <article className="w-[655px] h-[15%] px-[20px] flex justify-start items-center">
           <div className="mr-[20px]">
-            <DropDownItem
-              options={interestOptions}
-              value={interestOptions[0] || "전체보기"}
-              onChange={() => {}}
-            />
+            {myInterest && (
+              <CustomDropDown
+                options={[
+                  {
+                    display: "전체보기",
+                    value: -1,
+                  },
+                  ...myInterest.list.map((interest) => ({
+                    value: interest.interestIdx,
+                    display: interest.interestName,
+                  })),
+                ]}
+                onChange={(selectedOption) => {
+                  setSelectedInterest(selectedOption.value);
+                }}
+                selectedIdx={selectedInterest}
+              />
+            )}
           </div>
           <div className="font-bold	text-xl">{`${year}/${month}/${date}`}</div>
         </article>

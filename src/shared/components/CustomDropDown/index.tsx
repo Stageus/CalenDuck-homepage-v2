@@ -14,7 +14,9 @@ const CustomDropDown: React.FC<DropDownItemProps> = ({
   options,
   onChange,
 }) => {
-  const [selectedIndex, setSelectedIndex] = useState(selectedIdx || 0);
+  const [selectedIndex, setSelectedIndex] = useState(
+    selectedIdx ? (selectedIdx === -1 ? 0 : selectedIdx) : 0
+  );
 
   return (
     <select
