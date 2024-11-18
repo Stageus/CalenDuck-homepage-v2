@@ -31,19 +31,29 @@ const InputItem: React.FC<InputItemProps> = ({
   const inputType = type === "password" ? (showPw ? "text" : "password") : type;
 
   return (
-    <div className="w-full h-[80px] content-between mb-[10px]">
-      <label htmlFor={label}>{label}</label>
+    <div className="w-full">
+      <div className="mb-[8px]">
+        <label className="font-[14px] text-[#818181]" htmlFor={label}>
+          {label}
+        </label>
+      </div>
       <div className="relative w-full h-[50px]">
         <input
-          className="w-full h-[50px] relative border-solid border-2 border-grayColor rounded-[10px] p-[10px] outline-alertColor"
+          className="w-full h-[50px] relative border-solid border-2 border-[#E3E3E3] rounded-[10px] p-[10px] outline-[#FF7E29]"
           type={inputType}
           defaultValue={value}
           placeholder={placeholder}
           onChange={onChange}
         />
         {type === "password" && (
-          <button className="absolute top-[13px] right-[10px]" onClick={clickShowPwEvent}>
-            <img src={showPw ? visibility : visibilityOff} alt={showPw ? "보임" : "숨김"} />
+          <button
+            className="absolute top-[13px] right-[10px]"
+            onClick={clickShowPwEvent}
+          >
+            <img
+              src={showPw ? visibility : visibilityOff}
+              alt={showPw ? "보임" : "숨김"}
+            />
           </button>
         )}
 
