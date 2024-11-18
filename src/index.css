@@ -14,3 +14,10 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.custom_checkbox input[type="checkbox"] {
+  width: 21px;
+  height: 21px;
+  accent-color: #f16000;
+  border: 1px solid grey;
+}

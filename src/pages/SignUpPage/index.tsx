@@ -282,8 +282,8 @@ const SignUpPage = () => {
             />
           </div>
 
-          <div className="flex flex-col w-full mb-[32px]">
-            <label>
+          <div className="flex flex-col w-full mb-[32px] text-[14px] custom_checkbox">
+            <label className="flex items-center">
               <input
                 type="checkbox"
                 value="전체동의"
@@ -292,11 +292,11 @@ const SignUpPage = () => {
                 checked={checkedList.length === requiredCheckboxes.length}
                 onChange={toggleSelectAll}
               />
-              <span className="text-sm">전체동의</span>
+              <span className="text-[14px]">전체동의</span>
             </label>
-            <hr className="my-[5px]" />
-            <label className="w-full flex justify-between items-center mb-[2px]">
-              <div>
+            <hr className="my-[12px]" />
+            <label className="w-full flex justify-between items-center mb-[12px]">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   value="이용약관"
@@ -306,12 +306,12 @@ const SignUpPage = () => {
                 />
                 <span className="text-sm">이용약관 (필수)</span>
               </div>
-              <button className="border border-black px-[5px] py-[3px] rounded-[5px] text-xs">
+              <button className="bg-none border-none text-[14px] text-[#AAAAAA]">
                 전문보기
               </button>
             </label>
             <label className="w-full flex justify-between items-center">
-              <div>
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   value="개인정보 수집 및 동의"
@@ -321,7 +321,7 @@ const SignUpPage = () => {
                 />
                 <span className="text-sm">개인정보 수집 및 동의 (필수)</span>
               </div>
-              <button className="border border-black px-[5px] py-[3px] rounded-[5px] text-xs">
+              <button className="bg-none border-none text-[14px] text-[#AAAAAA]">
                 전문보기
               </button>
             </label>
