@@ -1,36 +1,39 @@
 import React from "react";
-import { useCookies } from "react-cookie";
 import remove from "shared/imgs/remove.svg";
-import { TScheduleItem } from "types";
+import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
+import { useDeleteScheduleByIdx } from "./hooks/useDeleteScheduleByIdx";
 
-// 스케줄 삭제 DELETE api (/schedules/:idx)
-const DeletePersonalScheduleItem: React.FC<TScheduleItem> = (props) => {
-  const { idx } = props;
-  const [cookies] = useCookies(["token"]);
+type Props = {
+  schedule: ScheduleDetailModel;
+  updateCalendarComponentKey: () => void;
+  refetchScheduleByDate: () => void;
+};
 
-  const deleteScheduleEvent = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules/${idx}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+const DeletePersonalScheduleItem: React.FC<Props> = ({
+  schedule,
+  updateCalendarComponentKey,
+  refetchScheduleByDate,
+}) => {
+  const { idx } = schedule;
 
-      if (response.ok) {
-        alert(`해당 스케줄을 삭제했습니다.`);
-      } else if (response.status === 401) {
-        console.log("잘못된 인증 정보 제공");
-        alert(`스케줄 삭제에 실패했습니다.`);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`스케줄 삭제 중 오류가 발생했습니다.`);
-    }
-  };
+  const { mutate: deletePersonalScheduleByIdx } = useDeleteScheduleByIdx({
+    onSuccess() {
+      console.log("hi");
+      updateCalendarComponentKey();
+      refetchScheduleByDate();
+    },
+  });
+
   return (
-    <button onClick={deleteScheduleEvent}>
+    <button
+      onClick={() => {
+        const confirmState = window.confirm("정말 삭제하시겠습니까?");
+
+        if (confirmState) {
+          deletePersonalScheduleByIdx(idx);
+        }
+      }}
+    >
       <img src={remove} alt="삭제하기" />
     </button>
   );

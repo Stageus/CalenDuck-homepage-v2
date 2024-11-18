@@ -5,6 +5,11 @@ interface Props {
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
 }
 
+/**
+ * UI가 잘못되어있어서 deprecated되었음
+ *
+ * @deprecated
+ */
 const ControlDate = ({ nowDate, setNowDate }: Props) => {
   const changeYear = (change: number) => {
     const date = new Date(nowDate.getTime());
@@ -20,15 +25,27 @@ const ControlDate = ({ nowDate, setNowDate }: Props) => {
   return (
     <article className="w-full h-[40px] flex justify-center items-center">
       <div>
-        <button onClick={() => changeYear(-1)} className="m-[10px]">{`<<`}</button>
-        <button onClick={() => changeMonth(-1)} className="m-[10px]">{`<`}</button>
+        <button
+          onClick={() => changeYear(-1)}
+          className="m-[10px]"
+        >{`<<`}</button>
+        <button
+          onClick={() => changeMonth(-1)}
+          className="m-[10px]"
+        >{`<`}</button>
       </div>
       <h2 className="font-bold text-xl mx-[15px]">{`${nowDate.getFullYear()}.${
         nowDate.getMonth() + 1
       }`}</h2>
       <div>
-        <button onClick={() => changeMonth(1)} className="m-[10px]">{`>`}</button>
-        <button onClick={() => changeYear(1)} className="m-[10px]">{`>>`}</button>
+        <button
+          onClick={() => changeMonth(1)}
+          className="m-[10px]"
+        >{`>`}</button>
+        <button
+          onClick={() => changeYear(1)}
+          className="m-[10px]"
+        >{`>>`}</button>
       </div>
     </article>
   );

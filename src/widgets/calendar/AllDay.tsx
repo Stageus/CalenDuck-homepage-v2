@@ -6,6 +6,7 @@ import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { TScheduleLabelItem } from "types";
 
 import ScheduleNumTagItem from "widgets/calendar/ScheduleNumTagItem";
+import { classNames } from "../../shared/utils/classNames";
 
 interface Props {
   day: Date;
@@ -19,35 +20,6 @@ interface ArticleProps {
   sameDay: boolean;
 }
 
-// const dummyData = [
-//   {
-//     id: 1,
-//     interest: "분데스리가",
-//     scheduleNum: 1,
-//   },
-//   {
-//     id: 2,
-//     interest: "뮤지컬",
-//     scheduleNum: 2,
-//   },
-//   {
-//     id: 3,
-//     interest: "클래식",
-//     scheduleNum: 3,
-//   },
-//   {
-//     id: 4,
-//     interest: "에스파",
-//     scheduleNum: 5,
-//   },
-//   {
-//     id: 5,
-//     interest: "뉴진스의 이름이 엄청나게 길다면",
-//     scheduleNum: 5,
-//   },
-// ];
-
-// ScheduleNumTagItem를 위해 해당 날짜에 해당하는 각 interest 별 스케줄 개수 GET api 연결
 const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
   const nowTime = new Date();
 
@@ -64,11 +36,13 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
   const [, setSelectedDate] = useRecoilState(selectedDateAtom);
 
   const openScheduleModalEvent = () => {
-    setOpenModal(!openModal);
     setSelectedDate(day);
+    setOpenModal(!openModal);
   };
 
-  const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(" ");
+  const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(
+    " "
+  );
   const numClassNames = [
     articleProps.sameMonth ? "font-semibold" : "font-thin",
     articleProps.sameDay ? "text-alertColor" : "text-black",
@@ -77,14 +51,32 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
   return (
     <button
       onClick={articleProps.sameMonth ? openScheduleModalEvent : undefined}
-      className={`border justify-center items-center grid flex-wrap content-between ${dayClassNames}`}
+      className={`relative border justify-center items-center h-[180px] flex-wrap content-between ${dayClassNames}`}
     >
-      <p className={numClassNames}>{day.getDate()}</p>
+      <p
+        className={classNames(
+          numClassNames,
+          "absolute top-0 right-[10px] text-[24px]"
+        )}
+      >
+        {day.getDate()}
+      </p>
       {articleProps.sameMonth && (
-        <div className="grid grid-cols-2">
-          {scheduleListData.map((elem) => {
-            return <ScheduleNumTagItem key={elem.idx} data={elem} />;
-          })}
+        <div className="flex flex-wrap justify-center">
+          {scheduleListData &&
+            scheduleListData.map((elem) => {
+              return (
+                <ScheduleNumTagItem
+                  key={elem.idx}
+                  data={{
+                    idx: elem.idx,
+                    count: elem.count,
+                    type: elem.type,
+                    name: elem.name,
+                  }}
+                />
+              );
+            })}
         </div>
       )}
     </button>

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import settingSidebarToggleAtom from "shared/recoil/settingSidebarToggleAtom";
 
-import search from "shared/imgs/search.svg";
 import MyInterestList from "widgets/settingSidebar/MyInterestList";
 import LogoutItem from "widgets/settingSidebar/LogoutItem";
 import DeleteAccountItem from "widgets/settingSidebar/DeleteAccountItem";
@@ -26,13 +25,16 @@ const SettingSidebar = () => {
   useEffect(() => {
     const getInterestList = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/interests/all`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_KEY}/interests/all`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
         const result = await response.json();
 
         if (response.status === 200) {
@@ -53,27 +55,6 @@ const SettingSidebar = () => {
         item.interestName.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : interestListData;
-
-  // const dummyData = [
-  //   {
-  //     interestIdx: 1,
-  //     interestName: "뮤지컬",
-  //   },
-  //   {
-  //     interestIdx: 2,
-  //     interestName: "프론트엔드",
-  //   },
-  //   {
-  //     interestIdx: 3,
-  //     interestName: "백엔드",
-  //   },
-  //   {
-  //     interestIdx: 4,
-  //     interestName: "롤토체스",
-  //   },
-  // ];
-
-  // 설정 사이드바 토글
 
   const [settingSidebarToggle] = useRecoilState(settingSidebarToggleAtom);
   if (!settingSidebarToggle) {

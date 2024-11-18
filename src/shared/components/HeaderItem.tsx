@@ -35,42 +35,44 @@ const HeaderItem = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full bg-white y-[70px] flex justify-between items-center z-50 px-[200px]">
-      <Link to={`/main?date=${date}`}>
-        <img src={logo} alt="메인" />
-      </Link>
+    <header className="fixed top-0 left-0 right-0 w-full bg-white y-[70px] flex justify-center items-center z-50">
+      <div className="max-w-[1200px] flex justify-between w-full px-[20px]">
+        <Link to={`/main?date=${date}`}>
+          <img src={logo} alt="메인" />
+        </Link>
 
-      {(pathname === "/main" || pathname === "/alarm" || pathname === "/contact") && (
-        <div className="flex justify-between items-center w-[200px]">
-          {/* AlarmPage로 이동 */}
-          <Link to="/alarm">
-            <button className="h-[30px] relative">
-              <img src={alarm} className="w-full h-full" alt="알림" />
-              {/* <div className="absolute top-[-7px] right-[-13px]"> */}
-              <HeaderAlarmNumTagItem />
-              {/* </div> */}
+        {(pathname === "/main" || pathname === "/alarm" || pathname === "/contact") && (
+          <div className="flex justify-between items-center w-[200px]">
+            {/* AlarmPage로 이동 */}
+            <Link to="/alarm">
+              <button className="h-[30px] relative">
+                <img src={alarm} className="w-full h-full" alt="알림" />
+                {/* <div className="absolute top-[-7px] right-[-13px]"> */}
+                <HeaderAlarmNumTagItem />
+                {/* </div> */}
+              </button>
+            </Link>
+            {/* SearchSidebar 토글 */}
+            <button className="h-[30px]" onClick={searchBtnToggleEvent}>
+              <img src={search} className="w-full h-full" alt="검색" />
             </button>
-          </Link>
-          {/* SearchSidebar 토글 */}
-          <button className="h-[30px]" onClick={searchBtnToggleEvent}>
-            <img src={search} className="w-full h-full" alt="검색" />
-          </button>
-          {/* SettingSidebar 토글 */}
-          <button className="h-[30px]" onClick={settingBtnToggleEvent}>
-            <img src={hamberger} className="w-full h-full" alt="설정" />
-          </button>
-        </div>
-      )}
+            {/* SettingSidebar 토글 */}
+            <button className="h-[30px]" onClick={settingBtnToggleEvent}>
+              <img src={hamberger} className="w-full h-full" alt="설정" />
+            </button>
+          </div>
+        )}
 
-      {pathname === "/manager" && (
-        <div>
-          <Link to={`/main?date=${date}`}>
-            <button className="flex items-center px-[10px] py-[5px] border border-black rounded-[5px]">
-              개인 스케줄
-            </button>
-          </Link>
-        </div>
-      )}
+        {pathname === "/manager" && (
+          <div>
+            <Link to={`/main?date=${date}`}>
+              <button className="flex items-center px-[10px] py-[5px] border border-black rounded-[5px]">
+                개인 스케줄
+              </button>
+            </Link>
+          </div>
+        )}
+      </div>
     </header>
   );
 };

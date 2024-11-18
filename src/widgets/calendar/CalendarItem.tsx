@@ -1,154 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import DropDownItem from "shared/components/DropDownItem";
-import ControlDate from "widgets/calendar/ControlDate";
 import DateBox from "widgets/calendar/DateBox";
-import { TScheduleLabelItem } from "types";
+import { useGetScheduleAll } from "./hooks/useGetScheduleAll";
+import { useGetSelectedYearMonth } from "../../shared/hooks/useGetSelectedYearMonth";
+import { useGetMyInterest } from "./hooks/useGetMyInterest";
+import CustomDropDown from "../../shared/components/CustomDropDown";
+import { MONTH, YEAR } from "../../shared/consts/date";
 
+// TODO: 이거 어디에 쓰는건지 판단 필요함
 interface CalendarItemProps {
   onDateClick: (date: Date) => void;
 }
 
 const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
-  // URL 쿼리스트링을 통한 date의 year, month 추출
   const location = useLocation();
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
-  const [interestOptions, setInterestOptions] = useState<string[]>(["전체보기"]);
 
   const urlSearch = new URLSearchParams(location.search);
-  const initialDate =
-    urlSearch.get("date") ||
-    `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, "0")}`;
 
-  // 관심사 카테고리 선택 GET api 연결 (/interests)
-  useEffect(() => {
-    const getInterestOptions = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/interests`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
-        const result = await response.json();
-        if (response.status === 200) {
-          const interests = result.list.map((item: { interestName: string }) => item.interestName);
-          setInterestOptions(["전체보기", ...interests]);
-        } else if (response.status === 204) {
-          setInterestOptions(["전체보기"]);
-        } else if (response.status === 401) {
-          console.log("토큰 검증 실패");
-        }
-      } catch (error) {
-        console.error("서버 에러: ", error);
-      }
-    };
-    console.log("🚀   interestOptions:", interestOptions);
+  const { data: myInterest } = useGetMyInterest();
 
-    getInterestOptions();
-  }, [cookies.token, interestOptions]);
-
-  const yearOptions = [
-    "2020",
-    "2021",
-    "2022",
-    "2023",
-    "2024",
-    "2025",
-    "2026",
-    "2027",
-    "2028",
-    "2029",
-    "2030",
-  ];
-
-  const monthOptions = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-
-  // date 값을 분해하여 초기 state 설정
-  const initialYear = initialDate.substring(0, 4);
-  const initialMonth = initialDate.substring(4, 6);
+  const getSelectedYearMonth = useGetSelectedYearMonth();
 
   const [nowDate, setNowDate] = useState<Date>(new Date());
-  const [selectedInterest, setSelectedInterest] = useState<string>(interestOptions[0]);
-  const [selectedYear, setSelectedYear] = useState<string>(initialYear);
-  const [selectedMonth, setSelectedMonth] = useState<string>(initialMonth);
-
-  const handleInterestChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedInterest(e.target.value);
-  };
-
-  const updateDate = (year: string, month: string) => {
-    const newDate = `${year}${month}`;
-    const params = new URLSearchParams(location.search);
-    params.set("date", newDate);
-
-    // 사용자가 "manager" 상태이고 관리 중인 interest가 있다면
-    if (status === "manager" && managingInterest) {
-      params.set("interest", managingInterest);
-    }
-
-    // 해당 params로 이동
-    navigate({ search: params.toString() });
-  };
-
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const year = e.target.value;
-    setSelectedYear(year);
-    updateDate(year, selectedMonth);
-  };
-
-  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const month = e.target.value;
-    setSelectedMonth(month);
-    updateDate(selectedYear, month);
-  };
 
   useEffect(() => {
-    const newDate = new Date(Number(selectedYear), Number(selectedMonth) - 1);
+    const newDate = new Date(
+      Number(getSelectedYearMonth().year),
+      Number(getSelectedYearMonth().month) - 1
+    );
     setNowDate(newDate);
-  }, [selectedYear, selectedMonth]);
+  }, [location.search]);
 
-  // 특정 년월 스케줄 전체 불러오기 GET api 연결 (/schedules?date)
-  const [scheduleListData, setScheduleListData] = useState<TScheduleLabelItem[]>([]);
-  useEffect(() => {
-    const getAlarmList = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/schedules?date=${nowDate}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
-        const result = await response.json();
-        console.log("알람 리스트", result);
+  const { data: personalScheduleData } = useGetScheduleAll(
+    getSelectedYearMonth().yearMonth
+  );
 
-        if (response.status === 200) {
-          setScheduleListData(result.list);
-        } else if (response.status === 401) {
-          console.log("잘못된 인증 정보 제공");
-        }
-      } catch (error) {
-        console.error("서버 에러: ", error);
-      }
-    };
-    getAlarmList();
-  }, [cookies.token, nowDate]);
-
-  // URL 쿼리스트링을 통한 내가 manager인 interest 추출
-  const [status] = useState<string>("general"); // 혹은 "manager"
   const managingInterest = urlSearch.get("interest");
 
-  // useEffect(() => {
-  //   let queryString = `/main?date=${initialDate}`;
-  //   if (status === "manager" && managingInterest) {
-  //     navigate(`&/main?date=${initialDate}&interest=${managingInterest}`);
-  //   }
-  // }, [initialDate, status, managingInterest]);
+  if (!personalScheduleData) {
+    return <></>;
+  }
 
   return (
     <section className="w-full h-[80vh] flex flex-col mt-[70px]">
@@ -162,24 +54,74 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
           </div>
         ) : (
           // general 계정으로 로그인
-          // 추가한 관심사가 있다면
-          interestOptions && (
-            <DropDownItem
-              options={interestOptions}
-              value={selectedInterest}
-              onChange={handleInterestChange}
+          myInterest && (
+            <CustomDropDown
+              options={[
+                {
+                  value: -1,
+                  display: "전체보기",
+                },
+                ...myInterest.list.map((interest) => ({
+                  value: interest.interestIdx,
+                  display: interest.interestName,
+                })),
+              ]}
+              onChange={(selectedOption) => {
+                if (selectedOption.value === -1) {
+                  urlSearch.delete("interestIdx");
+                } else {
+                  urlSearch.set("interestIdx", selectedOption.value);
+                }
+                navigate(`/main?${urlSearch.toString()}`, { replace: true });
+              }}
+              selectedIdx={
+                myInterest.list.findIndex(
+                  (interest) =>
+                    interest.interestIdx ===
+                    Number(urlSearch.get("interestIdx"))
+                ) + 1 // 제일 앞에 전체보기가 추가되기 때문
+              }
             />
           )
         )}
 
-        <DropDownItem options={yearOptions} value={selectedYear} onChange={handleYearChange} />
-        <DropDownItem options={monthOptions} value={selectedMonth} onChange={handleMonthChange} />
+        <CustomDropDown
+          options={YEAR.map((year) => ({ value: year, display: year }))}
+          onChange={(selectedOption) => {
+            urlSearch.set(
+              "date",
+              `${selectedOption.value}${getSelectedYearMonth().month}`
+            );
+
+            navigate(`/main?${urlSearch.toString()}`, { replace: true });
+          }}
+          selectedIdx={YEAR.findIndex(
+            (year) => year === getSelectedYearMonth().year
+          )}
+        />
+        <CustomDropDown
+          options={MONTH.map((month) => ({ value: month, display: month }))}
+          onChange={(selectedOption) => {
+            urlSearch.set(
+              "date",
+              `${getSelectedYearMonth().year}${selectedOption.value}`
+            );
+
+            navigate(`/main?${urlSearch.toString()}`, { replace: true });
+          }}
+          selectedIdx={MONTH.findIndex(
+            (month) => month === getSelectedYearMonth().month
+          )}
+        />
       </article>
 
       {/* 달력 부분 */}
       <article className="w-full h-[90%]">
-        <ControlDate nowDate={nowDate} setNowDate={setNowDate} />
-        <DateBox nowDate={nowDate} setNowDate={setNowDate} scheduleListData={scheduleListData} />
+        <DateBox
+          nowDate={nowDate}
+          setNowDate={setNowDate}
+          scheduleListData={personalScheduleData.list}
+        />
       </article>
     </section>
   );
