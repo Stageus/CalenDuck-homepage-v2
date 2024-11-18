@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-
-import mainLogo from "shared/imgs/mainLogo.svg";
+import mainLogo from "shared/imgs/duck_character.svg";
 import InputItem from "shared/components/InputItem";
 import { useLogin } from "./hooks/useLogin";
 
@@ -43,9 +41,23 @@ const SignInPage = () => {
   }, [cookies.token]);
 
   return (
-    <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-keyColor ">
-      <div className="flex justify-center items-center w-[40%]">
-        <img src={mainLogo} alt="메인로고" />
+    <section className="fixed left-0 w-[100vw] h-[100vh] flex bg-[#FFF6ED]">
+      <div className="flex justify-center w-[40%]">
+        <div className="mt-[120px]">
+          <h1 className="text-[40px] font-semibold mb-[16px]">
+            <span className="text-[#FF7E29]">캘린덕</span>과 함께라면
+            <br />
+            까먹는 일정은 없을 거예요!
+          </h1>
+          <p className="text-[16px] font-medium text-[#818181]">
+            알림을 직접 커스텀해서 나에게 더욱 딱 맞는 일정관리,
+            <br />
+            캘린덕으로 갓생 시작해봐요!
+          </p>
+        </div>
+        <div className="absolute bottom-0">
+          <img src={mainLogo} alt="메인로고" />
+        </div>
       </div>
 
       <article className="flex flex-col justify-center items-center w-[60%] bg-white rounded-l-[30px]">
