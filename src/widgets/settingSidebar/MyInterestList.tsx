@@ -1,47 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { TInterestItem } from "types";
 import MyInterestItem from "widgets/settingSidebar/MyInterestItem";
+import { useGetMyInterest } from "./hooks/useGetMyInterest";
 
-// 내 관심사 불러오기 GET api 연결 (/interests)
 const MyInterestList = () => {
-  const [cookies] = useCookies(["token"]);
-  const [interestOptions, setInterestOptions] = useState<TInterestItem[]>([]);
-
-  useEffect(() => {
-    const getInterestOptions = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_KEY}/interests`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${cookies.token}`,
-            },
-          }
-        );
-        const result = await response.json();
-        if (response.status === 200) {
-          setInterestOptions([...result.list]);
-        } else if (response.status === 204) {
-          console.log("개인 관심사가 하나도 없음");
-        } else if (response.status === 401) {
-          console.log("토큰 검증 실패");
-        }
-      } catch (error) {
-        console.error("서버 에러: ", error);
-      }
-    };
-
-    getInterestOptions();
-  }, [cookies.token]);
-
-  const handleRemoveInterest = (id: number) => {
-    setInterestOptions(
-      interestOptions.filter((item) => item.interestIdx !== id)
-    );
-  };
+  const { data: myInterests } = useGetMyInterest();
 
   return (
     <article className="w-full">
@@ -53,21 +14,14 @@ const MyInterestList = () => {
       </div>
 
       <div className="w-full h-[250px] mt-[10px] flex flex-col justify-start border-dashed border-2 border-alertColor">
-        {interestOptions.length > 0 ? (
-          interestOptions.map((item) => (
+        {myInterests &&
+          myInterests.list.map((item) => (
             <MyInterestItem
               key={item.interestIdx}
               data={item}
-              onRemove={handleRemoveInterest}
+              onRemove={() => {}}
             />
-          ))
-        ) : (
-          <div className="p-2 text-xs">
-            관심사를 추가하여
-            <br />
-            달력을 통해 스케줄을 확인해보세요:)
-          </div>
-        )}
+          ))}
       </div>
     </article>
   );
