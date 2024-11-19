@@ -1,8 +1,19 @@
 import MyInterestItem from "widgets/settingSidebar/MyInterestItem";
 import { useGetMyInterest } from "./hooks/useGetMyInterest";
+import { useCancelToRegisterInterest } from "./hooks/useCancelToRegisterInterest";
 
-const MyInterestList = () => {
-  const { data: myInterests } = useGetMyInterest();
+type Props = {
+  refetchInterest: () => void;
+};
+
+const MyInterestList = ({ refetchInterest }: Props) => {
+  const { data: myInterests, refetch: refetchMyInterest } = useGetMyInterest();
+  const { mutate: cancelToRegister } = useCancelToRegisterInterest({
+    onSuccess() {
+      refetchInterest();
+      refetchMyInterest();
+    },
+  });
 
   return (
     <article className="w-full">
@@ -19,7 +30,9 @@ const MyInterestList = () => {
             <MyInterestItem
               key={item.interestIdx}
               data={item}
-              onRemove={() => {}}
+              onClick={(idx) => {
+                cancelToRegister(idx);
+              }}
             />
           ))}
       </div>

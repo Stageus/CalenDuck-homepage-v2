@@ -17,7 +17,7 @@ export const useGetMyInterest = () => {
   const navigate = useNavigate();
 
   const query = useQuery<GetMyInterestAllResponseDto, AxiosError>({
-    queryKey: ["INTEREST-ALL"],
+    queryKey: ["INTEREST-MY-ALL"],
     async queryFn() {
       const { data } = await axiosInstance.get<GetMyInterestAllResponseDto>(
         `/interests`,
