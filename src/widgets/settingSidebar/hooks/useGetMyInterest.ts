@@ -11,13 +11,13 @@ type GetMyInterestAllResponseDto = {
   list: InterestModel[];
 };
 
-export const useGetMyInterest = () => {
+export const useGetMyInterest = (refetchFlag: number) => {
   const getLoginToken = useGetLoginToken();
   const removeToken = useRemoveLoginCookie();
   const navigate = useNavigate();
 
   const query = useQuery<GetMyInterestAllResponseDto, AxiosError>({
-    queryKey: ["INTEREST-MY-ALL"],
+    queryKey: ["INTEREST-MY-ALL", `MY-INTEREST-ALL-${refetchFlag}`],
     async queryFn() {
       const { data } = await axiosInstance.get<GetMyInterestAllResponseDto>(
         `/interests`,

@@ -6,6 +6,7 @@ import LogoutItem from "widgets/settingSidebar/LogoutItem";
 import DeleteAccountItem from "widgets/settingSidebar/DeleteAccountItem";
 import InterestListItem from "./InterestListItem";
 import { useGetInterestAll } from "./hooks/useGetInterestAll";
+import { useState } from "react";
 
 const SettingSidebar = () => {
   const date = `${new Date().getFullYear()}${(new Date().getMonth() + 1)
@@ -15,13 +16,19 @@ const SettingSidebar = () => {
 
   const { data: interests, refetch: refetchInterestList } = useGetInterestAll();
 
+  const [refetchMyInterestFlag, setRefetchMyInterestFlag] = useState(0);
+
   const [settingSidebarToggle] = useRecoilState(settingSidebarToggleAtom);
   if (!settingSidebarToggle) {
     return null;
   }
 
+  const refetchMyInterest = () => {
+    setRefetchMyInterestFlag((value) => value + 1);
+  };
+
   return (
-    <section className="w-[300px] h-full bg-white flex flex-col justify-start items-center p-[20px]">
+    <section className="w-[300px] h-full bg-white flex flex-col items-center p-[20px]">
       {/* 관심사 목록 */}
       <article className="w-[282px] h-[303px] border-[#E2E2E2] border-[1px] rounded-[12px] mb-[10px] px-[16px]">
         <h2 className="text-[18px] font-medium mt-[16px]">관심사 목록</h2>
@@ -30,9 +37,10 @@ const SettingSidebar = () => {
         </p>
         <div className="h-[225px] overflow-scroll">
           {interests && interests.list.length && (
-            <article className="w-full h-full flex flex-wrap gap-[8px]">
+            <article className="w-full flex flex-wrap items-start gap-[8px]">
               {interests.list.map((elem) => (
                 <InterestListItem
+                  refetchMyInterest={refetchMyInterest}
                   key={elem.interestIdx}
                   data={elem}
                   refetchInterestList={refetchInterestList}
@@ -44,7 +52,10 @@ const SettingSidebar = () => {
       </article>
 
       {/* 내 관심사 목록 */}
-      <MyInterestList refetchInterest={refetchInterestList} />
+      <MyInterestList
+        refetchInterest={refetchInterestList}
+        refetchFlag={refetchMyInterestFlag}
+      />
 
       {/* 하단 기능 버튼 */}
       <article className="w-full h-[130px] flex flex-col justify-between items-end">

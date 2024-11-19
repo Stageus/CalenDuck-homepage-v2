@@ -4,10 +4,12 @@ import { useCancelToRegisterInterest } from "./hooks/useCancelToRegisterInterest
 
 type Props = {
   refetchInterest: () => void;
+  refetchFlag: number;
 };
 
-const MyInterestList = ({ refetchInterest }: Props) => {
-  const { data: myInterests, refetch: refetchMyInterest } = useGetMyInterest();
+const MyInterestList = ({ refetchInterest, refetchFlag }: Props) => {
+  const { data: myInterests, refetch: refetchMyInterest } =
+    useGetMyInterest(refetchFlag);
   const { mutate: cancelToRegister } = useCancelToRegisterInterest({
     onSuccess() {
       refetchInterest();
