@@ -1,6 +1,7 @@
 import MyInterestItem from "widgets/settingSidebar/MyInterestItem";
 import { useGetMyInterest } from "./hooks/useGetMyInterest";
 import { useCancelToRegisterInterest } from "./hooks/useCancelToRegisterInterest";
+import { SCHEDULE_COLOR } from "../../shared/consts/color";
 
 type Props = {
   refetchInterest: () => void;
@@ -17,6 +18,10 @@ const MyInterestList = ({ refetchInterest, refetchFlag }: Props) => {
     },
   });
 
+  if (!myInterests || !myInterests.list.length) {
+    return <></>;
+  }
+
   return (
     <article className="w-full">
       <div>
@@ -28,13 +33,14 @@ const MyInterestList = ({ refetchInterest, refetchFlag }: Props) => {
 
       <div className="w-full">
         {myInterests &&
-          myInterests.list.map((item) => (
+          myInterests.list.map((item, i) => (
             <MyInterestItem
               key={item.interestIdx}
               data={item}
               onClick={(idx) => {
                 cancelToRegister(idx);
               }}
+              color={SCHEDULE_COLOR[i % SCHEDULE_COLOR.length].code}
             />
           ))}
       </div>
