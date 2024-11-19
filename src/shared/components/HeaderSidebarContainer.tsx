@@ -27,7 +27,7 @@ const HeaderSidebarContainer = () => {
       {/* 사이드바 외부(회색) 클릭 시 닫힘 기능 */}
       {(searchSidebarToggle || settingSidebarToggle) && (
         <div
-          className="mt-[70px] fixed inset-0 bg-lightgrayColor bg-opacity-50 z-10"
+          className="mt-[56px] fixed inset-0 bg-[rgba(0,0,0,0.5)] bg-opacity-50 z-10"
           onClick={closeSidebar}
         ></div>
       )}
@@ -41,7 +41,7 @@ const HeaderSidebarContainer = () => {
       </article>
 
       <article
-        className={`fixed mt-[70px] right-0 top-0 h-full z-20 transform transition-transform duration-300 ${
+        className={`fixed mt-[56px] right-0 top-0 h-full z-20 transform transition-transform duration-300 ${
           settingSidebarToggle ? "translate-x-0" : "translate-x-full"
         }`}
       >

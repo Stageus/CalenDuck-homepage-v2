@@ -14,13 +14,16 @@ const InterestListItem: React.FC<InterestListItemProps> = (props) => {
 
   const addInterestEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/interests/${interestIdx}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_KEY}/interests/${interestIdx}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         alert("관심사가 정상적으로 추가되었습니다.");
@@ -41,12 +44,12 @@ const InterestListItem: React.FC<InterestListItemProps> = (props) => {
   };
 
   return (
-    <div className="h-10 border px-3 flex justify-between items-center">
-      <div className="">{interestName}</div>
-      <button onClick={addInterestEvent}>
-        <img src={plus} />
-      </button>
-    </div>
+    <button
+      onClick={addInterestEvent}
+      className="h-[26px] border px-[12px] flex justify-between items-center rounded-[15px] border-[#E3E3E3] text-[12px] text-[#585858] hover:bg-[#eeeeee]"
+    >
+      <div className="">{interestName}</div>+
+    </button>
   );
 };
 
