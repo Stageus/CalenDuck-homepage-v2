@@ -28,7 +28,7 @@ const SettingSidebar = () => {
   };
 
   return (
-    <section className="w-[300px] h-full bg-white flex flex-col items-center p-[20px]">
+    <section className="w-[300px] relative h-[calc(100%-56px)] bg-white flex flex-col items-center p-[20px]">
       {/* 관심사 목록 */}
       <article className="w-[282px] h-[303px] border-[#E2E2E2] border-[1px] rounded-[12px] mb-[10px] px-[16px]">
         <h2 className="text-[18px] font-medium mt-[16px]">관심사 목록</h2>
@@ -52,13 +52,15 @@ const SettingSidebar = () => {
       </article>
 
       {/* 내 관심사 목록 */}
-      <MyInterestList
-        refetchInterest={refetchInterestList}
-        refetchFlag={refetchMyInterestFlag}
-      />
+      <div className="mt-[20px] w-full">
+        <MyInterestList
+          refetchInterest={refetchInterestList}
+          refetchFlag={refetchMyInterestFlag}
+        />
+      </div>
 
       {/* 하단 기능 버튼 */}
-      <article className="w-full h-[130px] flex flex-col justify-between items-end">
+      <article className="absolute w-full flex flex-col justify-between items-end bottom-0">
         {managingInterest && (
           <Link to={`/manager?date=${date}&interest=${managingInterest}`}>
             <button className="text-sm px-[10px] py-[5px] rounded-[5px] hover:bg-subColor">
