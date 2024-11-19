@@ -60,16 +60,16 @@ const SettingSidebar = () => {
       </div>
 
       {/* 하단 기능 버튼 */}
-      <article className="absolute w-full flex flex-col justify-between items-end bottom-0">
+      <article className="absolute w-full flex flex-col justify-between items-end bottom-[20px] right-[20px]">
         {managingInterest && (
           <Link to={`/manager?date=${date}&interest=${managingInterest}`}>
-            <button className="text-sm px-[10px] py-[5px] rounded-[5px] hover:bg-subColor">
+            <button className="font-medium text-[14px] text-[#585858] px-[10px] py-[5px] rounded-[5px] hover:bg-[#F0F0F0]">
               관심사 관리 페이지로 이동
             </button>
           </Link>
         )}
         <Link to="/contact">
-          <button className="text-sm px-[10px] py-[5px] rounded-[5px] hover:bg-subColor">
+          <button className="font-medium px-[10px] text-[14px] text-[#585858] py-[5px] rounded-[5px] hover:bg-[#F0F0F0]">
             1:1문의
           </button>
         </Link>
