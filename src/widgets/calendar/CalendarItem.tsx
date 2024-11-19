@@ -43,9 +43,9 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
   }
 
   return (
-    <section className="w-full h-[80vh] flex flex-col mt-[70px]">
+    <section className="w-full flex flex-col mt-[30px] bg-white  rounded-[8px] px-[44px]">
       {/* 드롭다운 선택 부분 */}
-      <article className="w-[25%] flex justify-between items-end">
+      <article className="flex h-[32px] my-[24px]">
         {managingInterest ? (
           // manager 계정으로 로그인
           <div className="flex flex-col">
@@ -56,6 +56,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
           // general 계정으로 로그인
           myInterest && (
             <CustomDropDown
+              className="mr-[12px]"
               options={[
                 {
                   value: -1,
@@ -86,6 +87,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
         )}
 
         <CustomDropDown
+          className="mr-[12px]"
           options={YEAR.map((year) => ({ value: year, display: year }))}
           onChange={(selectedOption) => {
             urlSearch.set(
@@ -116,7 +118,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({ onDateClick }) => {
       </article>
 
       {/* 달력 부분 */}
-      <article className="w-full h-[90%]">
+      <article className="w-full">
         <DateBox
           nowDate={nowDate}
           setNowDate={setNowDate}

@@ -8,13 +8,16 @@ const DeleteAccountItem = () => {
 
   const deleteAccountEvent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_KEY}/users/pw`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_KEY}/users/pw`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
       if (response.ok) {
         alert("회원 탈퇴에 성공하셨습니다.");
         removeCookie("token", { path: "/" });
@@ -31,7 +34,7 @@ const DeleteAccountItem = () => {
   return (
     <button
       onClick={deleteAccountEvent}
-      className="text-sm px-[10px] py-[5px] rounded-[5px] hover:bg-subColor"
+      className="font-medium text-[14px] text-[#585858] px-[10px] py-[5px] rounded-[5px] hover:bg-[#F0F0F0]"
     >
       탈퇴하기
     </button>

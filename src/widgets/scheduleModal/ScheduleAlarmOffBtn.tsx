@@ -14,7 +14,7 @@ const ScheduleAlarmOffBtn: React.FC<{
   });
 
   return (
-    <button onClick={() => alarmOff({ idx })} className="w-[25px] mr-[20px]">
+    <button onClick={() => alarmOff({ idx })}>
       <img src={alarmOffIcon} alt="알람off" className="w-full" />
     </button>
   );

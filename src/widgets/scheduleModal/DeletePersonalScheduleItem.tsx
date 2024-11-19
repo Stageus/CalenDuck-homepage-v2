@@ -18,7 +18,6 @@ const DeletePersonalScheduleItem: React.FC<Props> = ({
 
   const { mutate: deletePersonalScheduleByIdx } = useDeleteScheduleByIdx({
     onSuccess() {
-      console.log("hi");
       updateCalendarComponentKey();
       refetchScheduleByDate();
     },

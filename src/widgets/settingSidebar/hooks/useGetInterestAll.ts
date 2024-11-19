@@ -1,34 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
+import { InterestModel } from "../../../shared/model/interest.model";
+import { AxiosError } from "axios";
+import axiosInstance from "../../../shared/utils/axios";
 import { useGetLoginToken } from "../../../shared/hooks/useGetLoginToken";
 import { useRemoveLoginCookie } from "../../../shared/hooks/useRemoveCookie";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../../shared/utils/axios";
 import { useEffect } from "react";
-import { AxiosError } from "axios";
-import { InterestModel } from "../../../shared/model/interest.model";
 
-type GetMyInterestAllResponseDto = {
+type GetInterestAllResponseDto = {
   list: InterestModel[];
 };
 
-export const useGetMyInterest = () => {
+export const useGetInterestAll = () => {
   const getLoginToken = useGetLoginToken();
   const removeToken = useRemoveLoginCookie();
   const navigate = useNavigate();
 
-  const query = useQuery<GetMyInterestAllResponseDto, AxiosError>({
-    queryKey: ["MY-INTEREST-ALL-CALENDAR"],
+  const query = useQuery<GetInterestAllResponseDto, AxiosError>({
+    queryKey: ["INTEREST-ALL"],
     async queryFn() {
-      const { data } = await axiosInstance.get<GetMyInterestAllResponseDto>(
-        `/interests`,
+      const { data } = await axiosInstance.get<GetInterestAllResponseDto>(
+        `/interests/all`,
         {
           headers: {
             Authorization: `Bearer ${getLoginToken()}`,
           },
         }
       );
+
       return data;
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export const useGetMyInterest = () => {
       return;
     }
 
-    return alert("예상하지 못한 에러가 발생했습니다. 다시 시도해주세요.");
+    return alert("예상하지 못한 에러가 발생했습니다.");
   }, [query.error]);
 
   return query;

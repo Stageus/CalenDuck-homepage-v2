@@ -9,6 +9,8 @@ import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
 import { useUpdateScheduleByIdx } from "./hooks/useUpdateScheduleByIdx";
+import { classNames } from "../../shared/utils/classNames";
+import scheduleModalToggleAtom from "../../shared/recoil/scheduleModalToggleAtom";
 
 type Props = {
   data: ScheduleDetailModel;
@@ -50,8 +52,14 @@ const ScheduleItem: React.FC<Props> = ({
     }
   };
   // Edit을 위한 값
+  const scheduleDate = new Date(time);
   const [scheduleContents, setScheduleContents] = useState(contents);
-  const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduleTime, setScheduleTime] = useState(
+    `${scheduleDate.getHours().toString().padStart(2, "0")}:${scheduleDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`
+  );
   const [selectedDate] = useRecoilState(selectedDateAtom);
   const year = selectedDate && selectedDate.getFullYear();
   const month =
@@ -68,74 +76,66 @@ const ScheduleItem: React.FC<Props> = ({
 
   return (
     <article
-      className={`${
-        editing ? "bg-tagColor" : "bg-lightgrayColor"
-      } w-[638px] h-[70px] rounded-[5px] flex justify-between items-center p-[20px] m-[5px]`}
+      className={classNames(
+        `relative w-full h-[60px] rounded-[12px] flex items-center px-[18px] mb-[16px]`,
+        editing ? "bg-[#FFF6ED]" : "bg-[#F7F7F7]"
+      )}
     >
-      <div className="w-[80%] flex items-center">
-        {!alarm ? (
-          <div>
+      <div className="h-[60px] flex items-center">
+        <div className="mr-[36px] h-[24px]">
+          {!alarm ? (
             <ScheduleAlarmOnBtn setAlarm={setAlarm} idx={idx} />
-          </div>
-        ) : (
-          <div>
+          ) : (
             <ScheduleAlarmOffBtn setAlarm={setAlarm} idx={idx} />
-          </div>
-        )}
+          )}
+        </div>
+        <div className="w-[56px] mr-[6px] text-[13px] text-[#585858]">
+          {getTimeString(time)}
+        </div>
 
-        {editing ? (
-          <input
-            type="time"
-            onChange={(e) => setScheduleTime(e.target.value)}
-          />
-        ) : (
-          <div className="w-[15%]">{getTimeString(time)}</div>
-        )}
-
-        {type === "interest" && <div className="w-[20%]">{name}</div>}
+        <div className="text-[13px] text-[#585858] w-[60px]">
+          {name || "개인"}
+        </div>
 
         {editing ? (
           <input
             type="text"
-            className="w-[350px] outline-alertColor	bg-transparent p-[10px] items-center"
+            className="w-[280px] text-[#585858] h-[22px] text-[13px] border-b-[1px] outline-none	bg-transparent items-center"
             ref={titleRef}
             defaultValue={contents}
             maxLength={20}
             onChange={(e) => setScheduleContents(e.target.value)}
           />
         ) : (
-          <div className="w-[350px] h-[40px] flex items-center">{contents}</div>
+          <div className="w-[280px] text-[13px] text-[#585858] flex items-center mr-[42px]">
+            {contents}
+          </div>
         )}
       </div>
 
       {/* 개인 스케줄일 때에만 수정 및 삭제 가능 */}
       {type === "personal" && (
-        <div
-          className={`w-[13%] flex ${
-            editing ? "justify-center" : "justify-between"
-          }`}
-        >
+        <div className="flex absolute right-[18px]">
           {editing ? (
-            <>
-              <button
-                onClick={() => {
-                  if (!scheduleTime) {
-                    return alert("시간을 선택해주세요.");
-                  }
+            <button
+              className="w-[65px] h-[38px] right-0 top-[50%] text-[#FF7E29] text-[13px]"
+              onClick={() => {
+                if (!scheduleTime) {
+                  return alert("시간을 선택해주세요.");
+                }
 
-                  updateScheduleByIdx({
-                    idx,
-                    personalContents: scheduleContents,
-                    fullDate: `${year}${month}${date} ${scheduleTime}`,
-                  });
-                }}
-              >
-                <img src={finish} alt="제출하기" />
-              </button>
-            </>
+                updateScheduleByIdx({
+                  idx,
+                  personalContents: scheduleContents,
+                  fullDate: `${year}${month}${date} ${scheduleTime}`,
+                });
+              }}
+            >
+              수정하기
+            </button>
           ) : (
             <>
-              <button onClick={editTitleEvent}>
+              <button onClick={editTitleEvent} className="mr-[12px]">
                 <img src={edit} alt="수정하기" />
               </button>
               <DeletePersonalScheduleItem

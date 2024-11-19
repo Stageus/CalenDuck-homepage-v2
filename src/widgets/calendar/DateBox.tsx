@@ -39,7 +39,7 @@ interface Props {
 const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
   const allDay: Date[] = monthList(nowDate);
 
-  const weeks = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const weeks = ["일", "월", "화", "수", "목", "금", "토"];
 
   /**
    * 해당 달 1일 이전으로 표시되는 이전 달 날짜 개수
@@ -50,7 +50,7 @@ const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
   });
 
   return (
-    <article className="w-full h-[70vh] grid grid-cols-7 ">
+    <article className="w-full grid grid-cols-7 mb-[24px]">
       {weeks.map((week: string) => {
         return <WeekBox key={week} weekName={week} />;
       })}
@@ -62,6 +62,7 @@ const DateBox = ({ nowDate, setNowDate, scheduleListData }: Props) => {
 
         return (
           <AllDay
+            i={i}
             key={date.toISOString()}
             day={date}
             nowDate={nowDate}

@@ -1,23 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { useGetLoginToken } from "../../../shared/hooks/useGetLoginToken";
 import { useRemoveLoginCookie } from "../../../shared/hooks/useRemoveCookie";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../../shared/utils/axios";
-import { useEffect } from "react";
-import { AxiosError } from "axios";
 import { InterestModel } from "../../../shared/model/interest.model";
+import { useQuery } from "@tanstack/react-query";
+import axiosInstance from "../../../shared/utils/axios";
+import { AxiosError } from "axios";
+import { useEffect } from "react";
 
 type GetMyInterestAllResponseDto = {
   list: InterestModel[];
 };
 
-export const useGetMyInterest = () => {
+export const useGetMyInterest = (refetchFlag: number) => {
   const getLoginToken = useGetLoginToken();
   const removeToken = useRemoveLoginCookie();
   const navigate = useNavigate();
 
   const query = useQuery<GetMyInterestAllResponseDto, AxiosError>({
-    queryKey: ["MY-INTEREST-ALL-CALENDAR"],
+    queryKey: ["INTEREST-MY-ALL", `MY-INTEREST-ALL-${refetchFlag}`],
     async queryFn() {
       const { data } = await axiosInstance.get<GetMyInterestAllResponseDto>(
         `/interests`,

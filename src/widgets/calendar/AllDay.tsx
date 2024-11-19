@@ -7,12 +7,18 @@ import { TScheduleLabelItem } from "types";
 
 import ScheduleNumTagItem from "widgets/calendar/ScheduleNumTagItem";
 import { classNames } from "../../shared/utils/classNames";
+import { SCHEDULE_COLOR } from "../../shared/consts/color";
 
 interface Props {
   day: Date;
   nowDate: Date;
   setNowDate: React.Dispatch<React.SetStateAction<Date>>;
   scheduleListData: TScheduleLabelItem[];
+
+  /**
+   * 스케줄 라벨 색상 결정 요소입니다.
+   */
+  i: number;
 }
 
 interface ArticleProps {
@@ -20,7 +26,7 @@ interface ArticleProps {
   sameDay: boolean;
 }
 
-const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
+const AllDay = ({ day, nowDate, setNowDate, scheduleListData, i }: Props) => {
   const nowTime = new Date();
 
   const articleProps: ArticleProps = {
@@ -40,33 +46,40 @@ const AllDay = ({ day, nowDate, setNowDate, scheduleListData }: Props) => {
     setOpenModal(!openModal);
   };
 
-  const dayClassNames = [articleProps.sameMonth && "hover:bg-subColor"].join(
+  const dayClassNames = [articleProps.sameMonth && "hover:bg-[#F7F7F7]"].join(
     " "
   );
-  const numClassNames = [
-    articleProps.sameMonth ? "font-semibold" : "font-thin",
-    articleProps.sameDay ? "text-alertColor" : "text-black",
-  ].join(" ");
+
+  const startColorIndex = i % SCHEDULE_COLOR.length;
 
   return (
     <button
       onClick={articleProps.sameMonth ? openScheduleModalEvent : undefined}
-      className={`relative border justify-center items-center h-[180px] flex-wrap content-between ${dayClassNames}`}
+      className={`flex flex-col box-border items-center relative border-r-[1px] border-t-[1px] min-h-[98px] text-[10px] ${dayClassNames}`}
     >
-      <p
-        className={classNames(
-          numClassNames,
-          "absolute top-0 right-[10px] text-[24px]"
-        )}
-      >
-        {day.getDate()}
-      </p>
+      {articleProps.sameMonth ? (
+        <div className="h-[24px] w-[24px] my-[2px]">
+          <p
+            className={classNames(
+              "w-full h-full flex justify-center items-center",
+              articleProps.sameDay ? "rounded-full bg-[#FF7E29] text-white" : ""
+            )}
+          >
+            {day.getDate()}
+          </p>
+        </div>
+      ) : null}
       {articleProps.sameMonth && (
-        <div className="flex flex-wrap justify-center">
+        <div className="w-full flex flex-wrap justify-center px-[2px]">
           {scheduleListData &&
-            scheduleListData.map((elem) => {
+            scheduleListData.map((elem, i) => {
               return (
                 <ScheduleNumTagItem
+                  color={
+                    SCHEDULE_COLOR[
+                      (startColorIndex + i) % SCHEDULE_COLOR.length
+                    ].code
+                  }
                   key={elem.idx}
                   data={{
                     idx: elem.idx,

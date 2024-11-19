@@ -9,8 +9,8 @@ import { useLogin } from "./hooks/useLogin";
 const SignInPage = () => {
   const [cookies, setCookies] = useCookies(["token"]);
   const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
+  const [id, setId] = useState("guest1234");
+  const [pw, setPw] = useState("aa12341234**");
 
   const redirectToMainPage = (year?: string, month?: string) => {
     const date = new Date();
