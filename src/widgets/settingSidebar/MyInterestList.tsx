@@ -11,13 +11,16 @@ const MyInterestList = () => {
   useEffect(() => {
     const getInterestOptions = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/interests`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_API_KEY}/interests`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
         const result = await response.json();
         if (response.status === 200) {
           setInterestOptions([...result.list]);
@@ -35,43 +38,28 @@ const MyInterestList = () => {
   }, [cookies.token]);
 
   const handleRemoveInterest = (id: number) => {
-    setInterestOptions(interestOptions.filter((item) => item.interestIdx !== id));
+    setInterestOptions(
+      interestOptions.filter((item) => item.interestIdx !== id)
+    );
   };
-
-  // const dummyData = [
-  //   {
-  //     id: "myInterest_1",
-  //     interest: "미식축구",
-  //   },
-  //   {
-  //     id: "myInterest_2",
-  //     interest: "야구",
-  //   },
-  //   {
-  //     id: "myInterest_3",
-  //     interest: "분데스리가",
-  //   },
-  //   {
-  //     id: "myInterest_4",
-  //     interest: "NBA",
-  //   },
-  //   {
-  //     id: "myInterest_5",
-  //     interest: "뮤지컬",
-  //   },
-  // ];
 
   return (
     <article className="w-full">
       <div className="flex justify-start items-end">
         <h3 className="mr-[5px] font-semibold">내 관심사</h3>
-        <span className="text-alertColor text-xs">최대 5개까지 선택 가능합니다</span>
+        <span className="text-alertColor text-xs">
+          최대 5개까지 선택 가능합니다
+        </span>
       </div>
 
       <div className="w-full h-[250px] mt-[10px] flex flex-col justify-start border-dashed border-2 border-alertColor">
         {interestOptions.length > 0 ? (
           interestOptions.map((item) => (
-            <MyInterestItem key={item.interestIdx} data={item} onRemove={handleRemoveInterest} />
+            <MyInterestItem
+              key={item.interestIdx}
+              data={item}
+              onRemove={handleRemoveInterest}
+            />
           ))
         ) : (
           <div className="p-2 text-xs">

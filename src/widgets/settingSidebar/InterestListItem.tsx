@@ -4,13 +4,19 @@ import { useRegisterInterest } from "./hooks/useRegisterInterest";
 
 interface InterestListItemProps {
   data: TInterestItem;
+  refetchInterestList: () => void;
 }
 
-const InterestListItem: React.FC<InterestListItemProps> = (props) => {
-  const { interestIdx, interestName } = props.data;
+const InterestListItem: React.FC<InterestListItemProps> = ({
+  data,
+  refetchInterestList,
+}) => {
+  const { interestIdx, interestName } = data;
 
   const { mutate: registerInterest } = useRegisterInterest({
-    onSuccess() {},
+    onSuccess() {
+      refetchInterestList();
+    },
   });
 
   return (

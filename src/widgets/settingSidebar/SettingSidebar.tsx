@@ -22,7 +22,7 @@ const SettingSidebar = () => {
   const [interestListData, setInterestListData] = useState<TInterestItem[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data: interests } = useGetInterestAll();
+  const { data: interests, refetch: refetchInterestList } = useGetInterestAll();
 
   // 검색어를 기준으로 관심사 필터링(영문일 경우 소문자로 변환해 확인)
   const filteredInterestList = searchTerm
@@ -48,7 +48,11 @@ const SettingSidebar = () => {
           {interests && interests.list.length && (
             <article className="w-full h-[100px] flex flex-wrap gap-[8px]">
               {interests.list.map((elem) => (
-                <InterestListItem key={elem.interestIdx} data={elem} />
+                <InterestListItem
+                  key={elem.interestIdx}
+                  data={elem}
+                  refetchInterestList={refetchInterestList}
+                />
               ))}
             </article>
           )}
