@@ -24,7 +24,7 @@ const CustomDropDown: React.FC<DropDownItemProps> = ({
   return (
     <div
       className={classNames(
-        "bg-[#F7F7F7] rounded-[20px] flex items-center px-[12px]",
+        "bg-[#F7F7F7] rounded-[20px] flex items-center px-[12px] h-full",
         className
       )}
     >

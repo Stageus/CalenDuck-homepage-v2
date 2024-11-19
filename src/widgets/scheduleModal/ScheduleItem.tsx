@@ -9,6 +9,7 @@ import { useRecoilState } from "recoil";
 import selectedDateAtom from "shared/recoil/selectedDateAtom";
 import { ScheduleDetailModel } from "./hooks/useGetScheduleByDate";
 import { useUpdateScheduleByIdx } from "./hooks/useUpdateScheduleByIdx";
+import { classNames } from "../../shared/utils/classNames";
 
 type Props = {
   data: ScheduleDetailModel;
@@ -68,31 +69,33 @@ const ScheduleItem: React.FC<Props> = ({
 
   return (
     <article
-      className={`${
-        editing ? "bg-tagColor" : "bg-lightgrayColor"
-      } w-[638px] h-[70px] rounded-[5px] flex justify-between items-center p-[20px] m-[5px]`}
+      className={classNames(
+        `w-full h-[60px] rounded-[12px] flex items-center px-[18px] mb-[16px]`,
+        editing ? "bg-tagColor" : "bg-[#F7F7F7]"
+      )}
     >
-      <div className="w-[80%] flex items-center">
-        {!alarm ? (
-          <div>
+      <div className="h-[60px] flex items-center">
+        <div className="mr-[36px] h-[24px]">
+          {!alarm ? (
             <ScheduleAlarmOnBtn setAlarm={setAlarm} idx={idx} />
-          </div>
-        ) : (
-          <div>
+          ) : (
             <ScheduleAlarmOffBtn setAlarm={setAlarm} idx={idx} />
-          </div>
-        )}
-
+          )}
+        </div>
         {editing ? (
           <input
             type="time"
             onChange={(e) => setScheduleTime(e.target.value)}
           />
         ) : (
-          <div className="w-[15%]">{getTimeString(time)}</div>
+          <div className="w-[56px] mr-[6px] text-[13px] text-[#585858]">
+            {getTimeString(time)}
+          </div>
         )}
 
-        {type === "interest" && <div className="w-[20%]">{name}</div>}
+        <div className="text-[13px] text-[#585858] w-[60px]">
+          {name || "개인"}
+        </div>
 
         {editing ? (
           <input
@@ -104,16 +107,16 @@ const ScheduleItem: React.FC<Props> = ({
             onChange={(e) => setScheduleContents(e.target.value)}
           />
         ) : (
-          <div className="w-[350px] h-[40px] flex items-center">{contents}</div>
+          <div className="w-[280px] text-[13px] text-[#585858] flex items-center mr-[42px]">
+            {contents}
+          </div>
         )}
       </div>
 
       {/* 개인 스케줄일 때에만 수정 및 삭제 가능 */}
       {type === "personal" && (
         <div
-          className={`w-[13%] flex ${
-            editing ? "justify-center" : "justify-between"
-          }`}
+          className={` flex ${editing ? "justify-center" : "justify-between"}`}
         >
           {editing ? (
             <>
@@ -135,7 +138,7 @@ const ScheduleItem: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <button onClick={editTitleEvent}>
+              <button onClick={editTitleEvent} className="mr-[12px]">
                 <img src={edit} alt="수정하기" />
               </button>
               <DeletePersonalScheduleItem

@@ -42,34 +42,30 @@ const PostNewPersonalScheduleItem = ({
   return (
     <>
       {/* 개인 스케줄 입력란 */}
-      <article className="w-[655px] h-[15%] p-[20px] flex justify-between border-y border-black">
-        <div className="w-[85%] flex items-center">
-          {/* {alarm ? (
-            <div onClick={clickSetAlarmEvent}>
-              <ScheduleAlarmOnBtn idx={}/>
-            </div>
-          ) : (
-            <div onClick={clickSetAlarmEvent}>
-              <ScheduleAlarmOffBtn />
-            </div>
-          )} */}
-          <div>
+      <article className="w-full h-[60px] flex items-center px-[9px] justify-between border-[#E3E3E3] border rounded-[12px]">
+        <div className="flex items-center">
+          <div className="h-[42px] rounded-[12px] flex items-center justify-center mr-[9px] bg-[#F7F7F7]">
             <input
               type="time"
               value={scheduleTime}
+              className="px-[10px] outline-none"
+              style={{
+                background: "none",
+              }}
               onChange={(e) => setScheduleTime(e.target.value)}
             />
           </div>
           <input
             type="text"
-            className="w-[350px] border border-alertColor outline-alertColor bg-transparent p-[10px] ml-[30px] items-center"
+            className="w-[355px] outline-none bg-[#F7F7F7] h-[42px] rounded-[12px] text-[14px] pl-[10px]"
             maxLength={100}
+            placeholder="개인 스케줄을 입력하세요."
             value={personalContents}
             onChange={(e) => setPersonalContents(e.target.value)}
           />
         </div>
 
-        <div className="w-[10%] flex justify-center">
+        <div className="w-[89px] flex justify-center h-[42px] bg-[#FF7F50] rounded-[8px] text-white">
           <button
             onClick={() => {
               if (!scheduleTime) {
@@ -82,7 +78,7 @@ const PostNewPersonalScheduleItem = ({
               });
             }}
           >
-            <img src={finish} alt="제출하기" />
+            등록하기
           </button>
         </div>
       </article>

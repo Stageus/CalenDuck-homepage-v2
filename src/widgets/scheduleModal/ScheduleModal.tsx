@@ -27,9 +27,6 @@ const ScheduleModal: React.FC<Props> = ({
   const date =
     selectedDate && selectedDate.getDate().toString().padStart(2, "0");
 
-  const [cookies] = useCookies(["token"]);
-  const [interestOptions, setInterestOptions] = useState<string[]>([]);
-
   const [selectedInterest, setSelectedInterest] = useState(-1);
 
   const { data: scheduleData, refetch: refetchScheduleByDate } =
@@ -37,12 +34,20 @@ const ScheduleModal: React.FC<Props> = ({
 
   const { data: myInterest } = useGetMyInterest();
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
-    <section className="bg-keyColor w-[717px] h-[486px] p-[20px] flex justify-center items-center drop-shadow">
+    <section className="w-[670px] h-[546px] rounded-[8px] bg-white px-[32px] pt-[20px] flex justify-center items-center shadow-[0px_0px_20px_rgba(0,0,0,0.12)] z-10">
       <div className="bg-white w-full h-full flex flex-col items-center ">
         {/* 상단 */}
-        <article className="w-[655px] h-[15%] px-[20px] flex justify-start items-center">
-          <div className="mr-[20px]">
+        <article className="w-full h-[32px] mb-[12px] flex justify-start items-center">
+          <div className="mr-[16px] h-full">
             {myInterest && (
               <CustomDropDown
                 options={[
@@ -62,7 +67,7 @@ const ScheduleModal: React.FC<Props> = ({
               />
             )}
           </div>
-          <div className="font-bold	text-xl">{`${year}/${month}/${date}`}</div>
+          <div className="text-[13px] font-bold">{`${year}/${month}/${date}`}</div>
         </article>
 
         <PostNewPersonalScheduleItem
@@ -70,8 +75,10 @@ const ScheduleModal: React.FC<Props> = ({
           updateCalendarComponentKey={updateCalendarComponentKey}
         />
 
+        <div className="w-full h-[2px] bg-[#F7F7F7] my-[17px]"></div>
+
         {/* 해당 날짜의 스케줄 리스트 */}
-        <article className="flex flex-col items-center justify-start h-[70%] overflow-auto">
+        <article className="h-[364px] w-full flex flex-col items-center justify-start overflow-y-scroll">
           {scheduleData &&
             scheduleData.list.map((elem) => (
               <ScheduleItem

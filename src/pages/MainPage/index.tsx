@@ -31,7 +31,7 @@ const MainPage = () => {
   return (
     <>
       <HeaderSidebarContainer />
-      <div className="bg-[#FFF6ED] h-[100vh] mt-[56px]">
+      <div className="bg-[#FFF6ED] h-[100vh] pt-[56px]">
         <div className="max-w-[900px] w-full mx-auto">
           <article className="flex flex-col flex-grow">
             <CalendarItem
